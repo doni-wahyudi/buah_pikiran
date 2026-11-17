@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap');
+
+:root {
+  --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'Space Grotesk', monospace;
+  --primary-pink: #FF6B6B;
+  --primary-peach: #FFA07A;
+  --accent-peach-light: #FFF0ED;
+  --accent-peach-subtle: #FFF8F6;
+  --bg-wireframe: #FAFAFB;
+  --wireframe-border: #E5E7EB;
+  --wireframe-border-dark: #9CA3AF;
+  --wireframe-box: #F3F4F6;
+  --wireframe-pink: #FF4D6D;
+  --text-primary: #111827;
+  --text-secondary: #4B5563;
+  --text-muted: #6B7280;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: var(--font-sans);
+  background-color: var(--bg-wireframe);
+  color: var(--text-primary);
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Layout Utilities */
+.container-custom {
+  max-width: 1120px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+/* Wireframe Aesthetic Utilities */
+.wireframe-box {
+  background: #F3F4F6;
+  border: 1.5px dashed #D1D5DB;
+  position: relative;
+  overflow: hidden;
+}
+
+.wireframe-pink-box {
+  background: #FF5E7E;
+  border-radius: 12px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Marquee Animation (Referencing madebyhart.com) */
+@keyframes marquee {
+  0% { transform: translateX(0%); }
+  100% { transform: translateX(-50%); }
+}
+
+.marquee-container {
+  display: flex;
+  overflow: hidden;
+  user-select: none;
+  gap: 2rem;
+  width: 100%;
+}
+
+.marquee-track {
+  display: flex;
+  flex-shrink: 0;
+  gap: 3rem;
+  min-width: 100%;
+  animation: marquee 24s linear infinite;
+  align-items: center;
+}
+
+.marquee-container:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Modal Backdrop */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(17, 24, 39, 0.55);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1.25rem;
+}
+
+/* Button Styles */
+.wireframe-btn-peach {
+  background-color: #FFC000;
+  color: #111827;
+  font-weight: 800;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 10px rgba(255, 192, 0, 0.3);
+}
+
+.wireframe-btn-peach:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 192, 0, 0.45);
+}
+
+.wireframe-btn-pink {
+  background-color: #FF4D6D;
+  color: #FFFFFF;
+  font-weight: 800;
+  padding: 12px 28px;
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 10px rgba(255, 77, 109, 0.25);
+}
+
+.wireframe-btn-pink:hover {
+  background-color: #E63956;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 77, 109, 0.35);
+}
+
+/* Founder Card Hover Reveal Styles */
+.founder-card {
+  background-color: #FFFFFF;
+  border: 1.5px solid #E5E7EB;
+  border-radius: 20px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.founder-card:hover {
+  border-color: #FF5E7E;
+  transform: translateY(-4px);
+  box-shadow: 0 16px 30px -10px rgba(255, 94, 126, 0.15);
+}
+
+.founder-avatar-wrap {
+  width: 120px;
+  height: 120px;
+  margin: 0 auto 1.25rem auto;
+  border-radius: 50%;
+  background-color: #F9FAFB;
+  border: 2px dashed #CBD5E1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  transition: transform 0.3s ease;
+}
+
+.founder-card:hover .founder-avatar-wrap {
+  transform: scale(1.08);
+  border-color: #FF5E7E;
+}
+
+/* Drawer that smoothly opens upon hover */
+.founder-expertise-drawer {
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
+  margin-top: 0;
+}
+
+.founder-card:hover .founder-expertise-drawer {
+  max-height: 240px;
+  opacity: 1;
+  margin-top: 1.25rem;
+}
+
+/* Flip book testimonial effect */
+.testimonial-flip-card {
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}

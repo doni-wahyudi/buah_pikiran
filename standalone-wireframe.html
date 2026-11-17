@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Buah Pikiran — Wireframe Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  
+  <!-- React & ReactDOM Standalone -->
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+  <style>
+    :root {
+      --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+      --font-mono: 'Space Grotesk', monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: var(--font-sans); background-color: #FAFAFB; color: #111827; line-height: 1.5; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    
+    .container-custom { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
+
+    @keyframes marquee { 0% { transform: translateX(0%); } 100% { transform: translateX(-50%); } }
+    .marquee-container { display: flex; overflow: hidden; user-select: none; gap: 2rem; width: 100%; }
+    .marquee-track { display: flex; flex-shrink: 0; gap: 3rem; min-width: 100%; animation: marquee 24s linear infinite; align-items: center; }
+    .marquee-container:hover .marquee-track { animation-play-state: paused; }
+
+    .modal-overlay {
+      position: fixed; inset: 0; background-color: rgba(17, 24, 39, 0.55); backdrop-filter: blur(5px);
+      display: flex; align-items: center; justify-content: center; z-index: 1000; padding: 1.25rem;
+    }
+
+    .wireframe-btn-peach {
+      background-color: #FFC000; color: #111827; font-weight: 800; padding: 12px 28px;
+      border-radius: 9999px; border: none; cursor: pointer; display: inline-flex; align-items: center; gap: 8px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 4px 10px rgba(255, 192, 0, 0.3);
+    }
+    .wireframe-btn-peach:hover { transform: translateY(-2px); box-shadow: 0 6px 14px rgba(255, 192, 0, 0.45); }
+
+    /* Founder card hover reveal */
+    .founder-card {
+      background-color: #FFFFFF; border: 1.5px solid #E5E7EB; border-radius: 24px; padding: 2rem 1.5rem;
+      text-align: center; transition: all 0.3s ease; position: relative; overflow: hidden;
+    }
+    .founder-card:hover {
+      border-color: #FF5E7E; transform: translateY(-4px); box-shadow: 0 16px 30px -10px rgba(255, 94, 126, 0.15);
+    }
+    .founder-avatar-wrap {
+      width: 120px; height: 120px; margin: 0 auto 1.25rem auto; border-radius: 50%;
+      background-color: #F9FAFB; border: 2px dashed #CBD5E1; display: flex; align-items: center;
+      justify-content: center; font-size: 3rem; transition: transform 0.3s ease;
+    }
+    .founder-card:hover .founder-avatar-wrap { transform: scale(1.08); border-color: #FF5E7E; }
+    
+    .founder-expertise-drawer {
+      max-height: 0; opacity: 0; overflow: hidden;
+      transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease; margin-top: 0;
+    }
+    .founder-card:hover .founder-expertise-drawer { max-height: 240px; opacity: 1; margin-top: 1.25rem; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    function WireframePlaceholder({ label = 'Media Placeholder', aspectRatio = '16/9', variant = 'gray', height, children }) {
+      const isPink = variant === 'pink';
+      return (
+        <div style={{
+          width: '100%',
+          height: height || 'auto',
+          aspectRatio: height ? undefined : aspectRatio,
+          position: 'relative',
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          borderRadius: '20px',
+          backgroundColor: isPink ? '#FF5E7E' : '#F1F3F5',
+          color: isPink ? '#FFFFFF' : '#6B7280',
+          border: isPink ? '1px solid rgba(0,0,0,0.05)' : '1.5px dashed #D1D5DB',
+          overflow: 'hidden',
+          padding: '1rem',
+          textAlign: 'center'
+        }}>
+          {!isPink && (
+            <svg style={{ position: 'absolute', inset: 0, width: '100%', height: '100%', pointerEvents: 'none', stroke: 'rgba(156,163,175,0.25)', strokeWidth: '1' }}>
+              <line x1="0" y1="0" x2="100%" y2="100%" />
+              <line x1="100%" y1="0" x2="0" y2="100%" />
+            </svg>
+          )}
+          <div style={{ position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
+            <span style={{ fontSize: '1.5rem' }}>🖼️</span>
+            <span style={{ fontSize: '0.85rem', fontWeight: 600 }}>{label}</span>
+            {aspectRatio && <span style={{ fontSize: '0.7rem', opacity: 0.65 }}>[{aspectRatio}]</span>}
+            {children}
+          </div>
+        </div>
+      );
+    }
+
+    function MascotIcon({ type = 'hero', size = 100 }) {
+      if (type === 'logo') {
+        return (
+          <svg width={size} height={size} viewBox="0 0 40 40" fill="none">
+            <circle cx="20" cy="22" r="16" fill="#FF7B7B" />
+            <ellipse cx="14" cy="20" rx="2.5" ry="3.5" fill="#1F2937" />
+            <ellipse cx="26" cy="20" rx="2.5" ry="3.5" fill="#1F2937" />
+            <path d="M17 26 Q20 29 23 26" stroke="#1F2937" strokeWidth="1.5" strokeLinecap="round" />
+            <path d="M20 7 C23 2, 28 5, 26 10 C23 9, 21 8, 20 7 Z" fill="#84CC16" />
+          </svg>
+        );
+      }
+      return (
+        <div style={{ textAlign: 'center', fontSize: size * 0.45 }}>
+          {type === 'hero' ? '🍑⚔️' : type === 'researcher' ? '🍑🔍' : '🍑🍎🍌'}
+        </div>
+      );
+    }
+
+    function BrandMarquee() {
+      const brands = ['STARBUCKS', 'CPPrima Seafood', 'SOYJOY', 'Algonova', 'ISMAYA', 'TikTok GO', 'bumame', 'PHYSIOGEL', 'ALVA'];
+      const duplicated = [...brands, ...brands, ...brands];
+
+      return (
+        <section style={{ padding: '3.5rem 0', backgroundColor: '#FFFFFF', borderTop: '1px solid #E5E7EB', borderBottom: '1px solid #E5E7EB', overflow: 'hidden' }}>
+          <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
+            <h3 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#111827' }}>Brands we've worked with</h3>
+          </div>
+          <div className="marquee-container">
+            <div className="marquee-track">
+              {duplicated.map((name, i) => (
+                <div key={i} style={{ display: 'inline-flex', alignItems: 'center', gap: '10px', padding: '12px 22px', background: '#F9FAFB', border: '1px solid #E5E7EB', borderRadius: '10px', fontWeight: 800 }}>
+                  <span style={{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#FF7B7B' }}></span>
+                  {name}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+      );
+    }
+
+    // --- Vertical Service Drum Picker ---
+    // Scrolled vertically by clicking the item above and below, not by mouse wheel!
+    function VerticalServicePicker({ selectedService, onSelectService, onNext }) {
+      const services = [
+        '360° Campaign',
+        'Branding',
+        'Web design',
+        'SEO',
+        'KOL',
+        'Strategic communication',
+        'Marketing strategy'
+      ];
+
+      const currentIndex = services.indexOf(selectedService) !== -1 ? services.indexOf(selectedService) : 3;
+      const ITEM_HEIGHT = 48;
+      const GAP = 10;
+      const STEP = ITEM_HEIGHT + GAP;
+
+      const handlePrev = () => {
+        if (currentIndex > 0) onSelectService(services[currentIndex - 1]);
+      };
+
+      const handleNext = () => {
+        if (currentIndex < services.length - 1) onSelectService(services[currentIndex + 1]);
+      };
+
+      return (
+        <div style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          flexWrap: 'wrap',
+          gap: '2rem',
+          padding: '3rem 2.5rem',
+          backgroundColor: '#FFF0F2', // Soft peach/pink rounded box
+          borderRadius: '32px',
+          border: '2px dashed #FFB8C2',
+          minHeight: '280px'
+        }}>
+          {/* Left: "I need" */}
+          <div>
+            <h3 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#111827' }}>I need</h3>
+          </div>
+
+          {/* Center: Vertical Drum Picker */}
+          <div style={{ flex: '1 1 340px', display: 'flex', flexDirection: 'column', alignItems: 'center', height: '240px', overflow: 'hidden', position: 'relative' }}>
+            {/* Top Fade & Chevron (Click to scroll up) */}
+            <div onClick={handlePrev} style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '48px', background: 'linear-gradient(to bottom, #FFF0F2 40%, rgba(255,240,242,0))', zIndex: 10, display: 'flex', justifyContent: 'center', alignItems: 'flex-start', cursor: currentIndex > 0 ? 'pointer' : 'default', color: '#FF5E7E', paddingTop: '4px' }}>
+              {currentIndex > 0 && <span style={{ fontWeight: 900 }}>▲</span>}
+            </div>
+
+            {/* Vertical Drum Track */}
+            <div style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: `${GAP}px`,
+              transform: `translateY(${96 - currentIndex * STEP}px)`,
+              transition: 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)'
+            }}>
+              {services.map((svc, idx) => {
+                const isCenter = idx === currentIndex;
+                const dist = Math.abs(idx - currentIndex);
+                const opacity = dist === 0 ? 1 : dist === 1 ? 0.7 : dist === 2 ? 0.45 : 0.2;
+                const scale = dist === 0 ? 1 : dist === 1 ? 0.94 : dist === 2 ? 0.88 : 0.82;
+
+                return (
+                  <button
+                    key={svc}
+                    onClick={() => onSelectService(svc)}
+                    style={{
+                      height: `${ITEM_HEIGHT}px`,
+                      minWidth: '220px',
+                      padding: '0 26px',
+                      borderRadius: '9999px',
+                      border: isCenter ? '2px solid #EAB308' : '1px solid #E5E7EB',
+                      backgroundColor: isCenter ? '#FFC000' : '#FFFFFF',
+                      color: isCenter ? '#111827' : '#4B5563',
+                      fontWeight: isCenter ? 900 : 700,
+                      fontSize: isCenter ? '1.05rem' : '0.92rem',
+                      boxShadow: isCenter ? '0 6px 16px rgba(255, 192, 0, 0.45)' : 'none',
+                      cursor: 'pointer',
+                      opacity,
+                      transform: `scale(${scale})`,
+                      transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                      whiteSpace: 'nowrap'
+                    }}
+                  >
+                    {svc}
+                  </button>
+                );
+              })}
+            </div>
+
+            {/* Bottom Fade & Chevron (Click to scroll down) */}
+            <div onClick={handleNext} style={{ position: 'absolute', bottom: 0, left: 0, right: 0, height: '48px', background: 'linear-gradient(to top, #FFF0F2 40%, rgba(255,240,242,0))', zIndex: 10, display: 'flex', justifyContent: 'center', alignItems: 'flex-end', cursor: currentIndex < services.length - 1 ? 'pointer' : 'default', color: '#FF5E7E', paddingBottom: '4px' }}>
+              {currentIndex < services.length - 1 && <span style={{ fontWeight: 900 }}>▼</span>}
+            </div>
+          </div>
+
+          {/* Right: "Next →" Button */}
+          <div>
+            <button onClick={onNext} className="wireframe-btn-peach" style={{ fontSize: '1.2rem', padding: '14px 34px' }}>
+              <span>Next</span>
+              <span style={{ fontSize: '1.35rem', fontWeight: 900 }}>→</span>
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    // --- Pages ---
+    function HomePage({ onNavigate }) {
+      const [activeService, setActiveService] = useState('writing');
+      const services = [
+        { id: 'writing', title: 'Writing Content', desc: 'High-converting copywriting, SEO-driven articles, editorial narratives, and brand storytelling.' },
+        { id: 'ads', title: 'Paid Ads', desc: 'Full-funnel media buying across Meta, Google Search/YouTube, TikTok, and Programmatic.' },
+        { id: 'message', title: 'Customer Message', desc: 'Direct-to-consumer messaging, WhatsApp conversational marketing, and retention CRM.' }
+      ];
+
+      const [selectedPill, setSelectedPill] = useState('SEO');
+
+      return (
+        <div>
+          {/* Hero */}
+          <section style={{ padding: '3.5rem 0 3rem 0', textAlign: 'center' }}>
+            <div className="container-custom" style={{ maxWidth: '920px', backgroundColor: '#FFF8F7', padding: '3.5rem 2rem', borderRadius: '32px', border: '1px solid #FFE4E2' }}>
+              <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, lineHeight: 1.1 }}>
+                Hello!<br />We Are <span style={{ color: '#FF4D6D' }}>Buah Pikiran</span>
+              </h1>
+              <div style={{ margin: '1.5rem 0' }}>
+                <MascotIcon type="hero" size={140} />
+              </div>
+              <p style={{ fontSize: '1.2rem', color: '#4B5563', lineHeight: 1.6 }}>
+                Independent digital 🍑 agency based in Indonesia since 2019. We partner with local and international brands and institutions to build their brand, digital presence and campaigns.
+              </p>
+            </div>
+          </section>
+
+          {/* What we do */}
+          <section style={{ padding: '4rem 0' }}>
+            <div className="container-custom">
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3.5rem', alignItems: 'center' }}>
+                <div>
+                  <div style={{ height: '360px', backgroundColor: '#FF5E7E', borderRadius: '24px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', padding: '2rem', textAlign: 'center', boxShadow: '0 12px 24px rgba(255, 94, 126, 0.25)' }}>
+                    <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🖼️</div>
+                    <h4 style={{ fontSize: '1.3rem', fontWeight: 900 }}>{services.find(s => s.id === activeService)?.title}</h4>
+                    <p style={{ fontSize: '0.85rem', opacity: 0.9, marginTop: '6px' }}>Showcase media for active capability</p>
+                  </div>
+                </div>
+                <div>
+                  <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#6B7280' }}>What we do?</div>
+                  <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '1.75rem' }}>Performance</h2>
+                  <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                    {services.map(svc => {
+                      const isOpen = activeService === svc.id;
+                      return (
+                        <div key={svc.id} onClick={() => setActiveService(svc.id)} style={{ padding: '1.25rem 1.5rem', backgroundColor: isOpen ? '#FFF5F5' : '#FFFFFF', border: isOpen ? '2px solid #FF5E7E' : '1.5px solid #E5E7EB', borderRadius: '20px', cursor: 'pointer', transition: 'all 0.2s' }}>
+                          <div style={{ fontWeight: 800, fontSize: '1.2rem', color: isOpen ? '#FF4D6D' : '#111827' }}>
+                            🍑 {svc.title}
+                          </div>
+                          {isOpen && <p style={{ marginTop: '0.6rem', color: '#4B5563', fontSize: '0.92rem', lineHeight: 1.5 }}>{svc.desc}</p>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* I need (Vertical Drum Picker) */}
+          <section style={{ padding: '3rem 0' }}>
+            <div className="container-custom">
+              <VerticalServicePicker
+                selectedService={selectedPill}
+                onSelectService={setSelectedPill}
+                onNext={() => onNavigate('contact', { service: selectedPill })}
+              />
+            </div>
+          </section>
+
+          <BrandMarquee />
+
+          {/* Testimonial (Peach/Pink Rounded Card) */}
+          <section style={{ padding: '4.5rem 0' }}>
+            <div className="container-custom" style={{ textAlign: 'center' }}>
+              <div style={{ fontSize: '1.5rem', marginBottom: '0.5rem' }}>🍑🍑🍑🍑🍑</div>
+              <h2 style={{ fontSize: '2.4rem', fontWeight: 900, marginBottom: '2.5rem' }}>What They Say About Buah Pikiran</h2>
+              <div style={{ maxWidth: '920px', margin: '0 auto', padding: '2.5rem', border: '1.5px solid #FFD3D9', borderRadius: '28px', backgroundColor: '#FFF2F4', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '2.5rem', alignItems: 'center' }}>
+                <div style={{ textAlign: 'left' }}>
+                  <p style={{ fontSize: '1.15rem', fontStyle: 'italic', marginBottom: '1.5rem', lineHeight: 1.6 }}>
+                    “Buah Pikiran is one of our partners that opens new perspectives and insights on digital strategies. We appreciate its responsiveness for every tasks and discussions in building PLN’s digital presence. Cheers!”
+                  </p>
+                  <div style={{ fontWeight: 800, fontSize: '1.05rem' }}>Joshia Pardede</div>
+                  <div style={{ fontSize: '0.85rem', color: '#6B7280' }}>Corporate Social & Digital Media Officer PT PLN (Persero)</div>
+                </div>
+                <div style={{ height: '220px', backgroundColor: '#FF5E7E', borderRadius: '20px', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', color: '#FFFFFF', padding: '1rem', textAlign: 'center' }}>
+                  <div style={{ fontSize: '2.5rem', marginBottom: '6px' }}>🏢</div>
+                  <h4 style={{ fontWeight: 800 }}>Joshia Pardede</h4>
+                  <span style={{ fontSize: '0.8rem', opacity: 0.9 }}>Partner Feature</span>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Articles Teaser */}
+          <section style={{ padding: '4.5rem 0' }}>
+            <div className="container-custom">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+                <h2 style={{ fontSize: '2.2rem', fontWeight: 900 }}>Read the Juicy Articles</h2>
+                <button onClick={() => onNavigate('articles')} className="wireframe-btn-peach">View more →</button>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.75rem' }}>
+                {['Zero-Click Searches Are Rising: How to Keep Traffic Alive', 'How Google’s AI Overviews Reshape CTR', 'The Hidden Cost of Inconsistent Messaging'].map((title, i) => (
+                  <div key={i} onClick={() => onNavigate('articles')} style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1.5px solid #E5E7EB', overflow: 'hidden', cursor: 'pointer' }}>
+                    <WireframePlaceholder height="190px" label="Article Thumbnail" />
+                    <div style={{ padding: '1.25rem' }}>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#FF4D6D', backgroundColor: '#FFE4E6', padding: '4px 10px', borderRadius: '6px' }}>SEO & AI Search</span>
+                      <h4 style={{ fontWeight: 800, fontSize: '1.05rem', marginTop: '8px' }}>{title}</h4>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Recent Projects Teaser */}
+          <section style={{ padding: '4.5rem 0' }}>
+            <div className="container-custom">
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <h2 style={{ fontSize: '2.2rem', fontWeight: 900 }}>Recent Project</h2>
+                <button onClick={() => onNavigate('works')} className="wireframe-btn-peach">View more →</button>
+              </div>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '1.5rem' }}>
+                {['FEMMY FYBER', 'KOMIX', 'FLYJAYA'].map((name, i) => (
+                  <div key={i} onClick={() => onNavigate('case-study')} style={{ backgroundColor: '#FFFFFF', borderRadius: '20px', border: '1.5px solid #E5E7EB', overflow: 'hidden', cursor: 'pointer' }}>
+                    <WireframePlaceholder height="160px" label={name} />
+                    <div style={{ padding: '1rem', fontWeight: 800, display: 'flex', justifyContent: 'space-between' }}>
+                      <span>{name}</span>
+                      <span style={{ color: '#FF4D6D' }}>→</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </div>
+      );
+    }
+
+    function AboutPage({ onNavigate }) {
+      const [modal, setModal] = useState(null);
+
+      return (
+        <div>
+          <section style={{ padding: '3rem 0' }}>
+            <div className="container-custom">
+              <div style={{ backgroundColor: '#FFF2F4', borderRadius: '32px', border: '1.5px solid #FFD3D9', padding: '3.5rem 3rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem', alignItems: 'center' }}>
+                <div>
+                  <h1 style={{ fontSize: '3.2rem', fontWeight: 900, marginBottom: '1rem' }}>About Us</h1>
+                  <p style={{ fontSize: '1.3rem', color: '#4B5563', lineHeight: 1.5 }}>
+                    Started in 2019, Buah Pikiran build its culture and value to reach global market.
+                  </p>
+                </div>
+                <div style={{ textAlign: 'center' }}>
+                  <MascotIcon type="researcher" size={150} />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Values */}
+          <section style={{ padding: '4.5rem 0' }}>
+            <div className="container-custom">
+              <h2 style={{ fontSize: '2.4rem', fontWeight: 900, textAlign: 'center', marginBottom: '3rem' }}>Our value</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
+                {[
+                  { name: 'Boldness', desc: 'Shows boldness in their actions in the role that they’re in.', icon: '🔍' },
+                  { name: 'Integrity', desc: 'Shows honesty in their intentions & actions.', icon: '⚖️' },
+                  { name: 'Teamwork', desc: 'Communicate clearly their problems/solutions.', icon: '🙌' },
+                  { name: 'Effectiveness', desc: 'Do work that shows effective results.', icon: '⏱️' }
+                ].map((v, i) => (
+                  <div key={i} style={{ backgroundColor: '#FFFFFF', border: '1.5px solid #E5E7EB', borderRadius: '24px', padding: '2rem 1.75rem' }}>
+                    <div style={{ display: 'inline-block', backgroundColor: '#FF6B7D', color: '#FFF', fontWeight: 800, padding: '5px 14px', borderRadius: '10px', marginBottom: '1rem' }}>{v.name}</div>
+                    <p style={{ fontSize: '0.92rem', color: '#4B5563', marginBottom: '1.5rem' }}>{v.desc}</p>
+                    <div style={{ fontSize: '2rem', textAlign: 'right' }}>{v.icon}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Founders */}
+          <section style={{ padding: '4.5rem 0' }}>
+            <div className="container-custom">
+              <h2 style={{ fontSize: '2.4rem', fontWeight: 900, textAlign: 'center', marginBottom: '3rem' }}>Meet the Founders</h2>
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem' }}>
+                {[
+                  { name: 'Suharto Rizkiadi', role: 'CEO', icon: '👨‍💼', exp: ['Business Strategy & Client Development', 'Cross-Client Collaboration', 'Team Building'] },
+                  { name: 'Kartika Eprilla', role: 'COO', icon: '👩‍💼', exp: ['360 Marketing Strategy', 'Digital Content Marketing', 'Standard Enforcer'] },
+                  { name: 'Nurul Imania', role: 'CGO', icon: '🧕', exp: ['Growth Strategy & Transformation', 'Campaign Optimization', 'Brand Acceleration'] }
+                ].map((f, i) => (
+                  <div key={i} className="founder-card">
+                    <div className="founder-avatar-wrap">{f.icon}</div>
+                    <h3 style={{ fontWeight: 900, fontSize: '1.3rem' }}>{f.name}</h3>
+                    <div style={{ fontSize: '0.9rem', color: '#6B7280' }}>{f.role}</div>
+                    
+                    <div className="founder-expertise-drawer">
+                      <div style={{ textAlign: 'left', backgroundColor: '#FFF5F6', padding: '1rem', borderRadius: '16px', border: '1px solid #FFD3D9' }}>
+                        <div style={{ fontSize: '0.75rem', fontWeight: 800, color: '#B45309', marginBottom: '6px' }}>Core Expertise & Focus Area:</div>
+                        {f.exp.map((e, idx) => <div key={idx} style={{ fontSize: '0.8rem', color: '#374151', padding: '3px 0' }}>• {e}</div>)}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          {/* Signature Approach (Peach/Pink Rounded Box) */}
+          <section style={{ padding: '4.5rem 0' }}>
+            <div className="container-custom">
+              <div style={{ backgroundColor: '#FFEBEB', borderRadius: '32px', border: '2px solid #FFCCD2', padding: '4rem 2.5rem', textAlign: 'center' }}>
+                <h2 style={{ fontSize: '2.4rem', fontWeight: 900, marginBottom: '2.5rem' }}>Our Signature Approach</h2>
+                <div style={{ display: 'flex', justifyContent: 'center', gap: '2.5rem', flexWrap: 'wrap' }}>
+                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '2.5rem 2rem', border: '1.5px solid #FFCCD5', maxWidth: '280px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>⚡</div>
+                    <button onClick={() => setModal('Sprint')} className="wireframe-btn-peach" style={{ fontSize: '1.15rem', padding: '12px 36px' }}>Sprint</button>
+                  </div>
+                  <div style={{ backgroundColor: '#FFFFFF', borderRadius: '24px', padding: '2.5rem 2rem', border: '1.5px solid #FFCCD5', maxWidth: '280px', width: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🧩</div>
+                    <button onClick={() => setModal('PODS')} className="wireframe-btn-peach" style={{ fontSize: '1.15rem', padding: '12px 36px' }}>PODS</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* CTA */}
+          <section style={{ padding: '3.5rem 0', textAlign: 'center' }}>
+            <div className="container-custom" style={{ maxWidth: '920px', backgroundColor: '#FFF8F7', borderRadius: '32px', border: '1.5px solid #FFE4E2', padding: '3.5rem 2rem' }}>
+              <h2 style={{ fontSize: '2.5rem', fontWeight: 900, marginBottom: '1.5rem' }}>Start your project with us!</h2>
+              <MascotIcon type="trio" size={120} />
+              <div style={{ marginTop: '2rem' }}>
+                <button onClick={() => onNavigate('contact')} className="wireframe-btn-peach" style={{ fontSize: '1.15rem', padding: '14px 36px' }}>
+                  Book a Discovery Call →
+                </button>
+              </div>
+            </div>
+          </section>
+
+          {modal && (
+            <div className="modal-overlay" onClick={() => setModal(null)}>
+              <div style={{ backgroundColor: '#FFF', padding: '2.25rem', borderRadius: '24px', maxWidth: '480px', width: '100%' }} onClick={e => e.stopPropagation()}>
+                <h3 style={{ fontSize: '1.5rem', fontWeight: 900, marginBottom: '1rem' }}>Approach: {modal}</h3>
+                <div style={{ height: '180px', backgroundColor: '#FF5E7E', borderRadius: '20px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF', fontWeight: 800 }}>Animation GIF Mockup</div>
+                <p style={{ marginTop: '1.25rem', color: '#4B5563', fontSize: '0.92rem', lineHeight: 1.6 }}>
+                  Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat.
+                </p>
+                <button onClick={() => setModal(null)} style={{ marginTop: '1.5rem', padding: '8px 24px', borderRadius: '9999px', border: '1px solid #D1D5DB', cursor: 'pointer', fontWeight: 700 }}>Close</button>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    function ContactPage({ queryParams }) {
+      const [service, setService] = useState(queryParams?.service || 'SEO');
+      const [sent, setSent] = useState(false);
+
+      return (
+        <div style={{ padding: '2.5rem 0 5rem 0' }}>
+          <div className="container-custom" style={{ maxWidth: '820px' }}>
+            <div style={{ textAlign: 'center', marginBottom: '2.5rem', backgroundColor: '#FFF2F4', borderRadius: '32px', border: '1.5px solid #FFD3D9', padding: '3rem 2rem' }}>
+              <div style={{ fontSize: '2.5rem', marginBottom: '1rem' }}>🍎🍑🍌</div>
+              <div style={{ fontSize: '1rem', color: '#6B7280' }}>Drop us hello at:</div>
+              <div style={{ fontSize: '2.6rem', fontWeight: 900, marginBottom: '1.5rem' }}>hello@buahpikiran.id</div>
+              <div style={{ display: 'inline-block', backgroundColor: '#FFFFFF', border: '1px solid #FFCCD5', padding: '8px 26px', borderRadius: '9999px', fontWeight: 800 }}>OR, LET US CONTACT YOU</div>
+            </div>
+
+            <div style={{ backgroundColor: '#FFF8F9', padding: '3rem 2.5rem', borderRadius: '32px', border: '2px solid #FFCCD5' }}>
+              {sent ? (
+                <div style={{ textAlign: 'center', padding: '2.5rem' }}>
+                  <div style={{ fontSize: '3rem' }}>🎉</div>
+                  <h3 style={{ fontSize: '1.6rem', fontWeight: 800 }}>Thank you! Message sent.</h3>
+                </div>
+              ) : (
+                <form onSubmit={(e) => { e.preventDefault(); setSent(true); }} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+                  <div>
+                    <label style={{ fontWeight: 800, fontSize: '1.25rem', display: 'block', marginBottom: '1rem' }}>How can you be part of us?</label>
+                    <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                      {['I have a project', 'I can refer you to a potential client', 'I want to be part of your team'].map((opt, i) => (
+                        <label key={i} style={{ display: 'flex', alignItems: 'center', gap: '12px', padding: '14px 20px', backgroundColor: '#FFFFFF', borderRadius: '16px', border: '1.5px solid #FFD3D9', cursor: 'pointer' }}>
+                          <input type="radio" name="part" defaultChecked={i === 0} style={{ accentColor: '#FF4D6D' }} />
+                          <span style={{ fontWeight: 700 }}>{opt}</span>
+                        </label>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label style={{ fontWeight: 800, fontSize: '1.2rem', display: 'block', marginBottom: '8px' }}>Choose services*</label>
+                    <select value={service} onChange={e => setService(e.target.value)} style={{ width: '100%', padding: '14px 20px', borderRadius: '16px', border: '1.5px solid #FFCCD5', fontWeight: 700, fontSize: '1rem' }}>
+                      {['Digital PR', 'SEO', 'Content', 'Client Services', 'Creative Studio', 'Data', 'Social Media', 'Paid Ads', 'AOE Search'].map(s => (
+                        <option key={s} value={s}>{s}</option>
+                      ))}
+                    </select>
+                  </div>
+
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                    <input required placeholder="First name*" style={{ padding: '14px', borderRadius: '14px', border: '1.5px solid #FFD3D9' }} />
+                    <input required placeholder="Last name*" style={{ padding: '14px', borderRadius: '14px', border: '1.5px solid #FFD3D9' }} />
+                  </div>
+
+                  <input type="email" required placeholder="Your email*" style={{ padding: '14px', borderRadius: '14px', border: '1.5px solid #FFD3D9' }} />
+                  <textarea rows="4" placeholder="Message (optional)" style={{ padding: '14px', borderRadius: '14px', border: '1.5px solid #FFD3D9' }}></textarea>
+
+                  <div style={{ textAlign: 'right' }}>
+                    <button type="submit" className="wireframe-btn-peach" style={{ fontSize: '1.15rem', padding: '14px 40px' }}>Send</button>
+                  </div>
+                </form>
+              )}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function WorksPage({ onNavigate }) {
+      return (
+        <div style={{ padding: '2.5rem 0 5rem 0' }}>
+          <div className="container-custom">
+            <div style={{ backgroundColor: '#FFF2F4', borderRadius: '32px', border: '1.5px solid #FFD3D9', padding: '3.5rem 3rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem', alignItems: 'center', marginBottom: '3rem' }}>
+              <h1 style={{ fontSize: '3.2rem', fontWeight: 900 }}>The problem we 🍑 solved</h1>
+              <p style={{ fontSize: '1.2rem', color: '#4B5563', lineHeight: 1.6 }}>
+                Clients globally come to us with either one of these problems: <strong>Demand</strong> or <strong>Discovery</strong>. We drive search demand or discovery for brands with ambitions to be category leaders.
+              </p>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2rem' }}>
+              {[
+                { name: 'FEMMY FYBER', tag: 'KOL' },
+                { name: 'KOMIX', tag: 'Branding' },
+                { name: 'FLYJAYA', tag: 'SEO' },
+                { name: 'PHYSIOGEL', tag: 'Social Media' },
+                { name: 'LAMPAG', tag: 'Website' }
+              ].map((p, i) => (
+                <div key={i} onClick={() => onNavigate('case-study')} style={{ border: '1.5px solid #E5E7EB', borderRadius: '24px', overflow: 'hidden', cursor: 'pointer', backgroundColor: '#FFF' }}>
+                  <WireframePlaceholder height="240px" label={p.name} />
+                  <div style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <div>
+                      <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#FF4D6D' }}>{p.tag}</span>
+                      <h3 style={{ fontWeight: 900, fontSize: '1.3rem' }}>{p.name}</h3>
+                    </div>
+                    <span>→</span>
+                  </div>
+                </div>
+              ))}
+              {/* Pink Rounded Boxes as in PDF */}
+              <div style={{ height: '340px', backgroundColor: '#FF5E7E', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF', fontWeight: 800 }}>Upcoming Slot</div>
+              <div style={{ height: '340px', backgroundColor: '#FF5E7E', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF', fontWeight: 800 }}>Upcoming Slot</div>
+              <div style={{ height: '340px', backgroundColor: '#FF5E7E', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF', fontWeight: 800 }}>Upcoming Slot</div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function CaseStudyDetailPage({ onNavigate }) {
+      const [counts, setCounts] = useState({ traffic: 0, keywords: 0, clicks: 0, buyers: 0 });
+
+      useEffect(() => {
+        const timer = setInterval(() => {
+          setCounts(prev => ({
+            traffic: prev.traffic < 155 ? Math.min(155, prev.traffic + 5) : 155,
+            keywords: prev.keywords < 1.9 ? +(prev.keywords + 0.1).toFixed(1) : 1.9,
+            clicks: prev.clicks < 235 ? Math.min(235, prev.clicks + 8) : 235,
+            buyers: prev.buyers < 140 ? Math.min(140, prev.buyers + 5) : 140
+          }));
+        }, 35);
+        return () => clearInterval(timer);
+      }, []);
+
+      return (
+        <div style={{ padding: '2.5rem 0 5rem 0' }}>
+          <div className="container-custom">
+            <button onClick={() => onNavigate('works')} className="wireframe-btn-peach" style={{ marginBottom: '2.5rem' }}>← Back to our works</button>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3rem', marginBottom: '3.5rem' }}>
+              <WireframePlaceholder height="340px" label="Primary Campaign Visual" />
+              <div>
+                <span style={{ fontWeight: 800, color: '#FF4D6D' }}>KOL • 2026</span>
+                <h1 style={{ fontSize: '2.8rem', fontWeight: 900, margin: '8px 0 1rem 0' }}>FEMMY FYBER</h1>
+                <p style={{ color: '#4B5563', lineHeight: 1.6 }}>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: '3.5rem' }}>
+              <h3 style={{ fontWeight: 800, color: '#FF4D6D' }}>Objective</h3>
+              <h2 style={{ fontSize: '1.8rem', fontWeight: 800, marginBottom: '1.5rem' }}>Launching Dojo in B2B UK market to half a bill £ revenue in 5 years</h2>
+              <h3 style={{ fontWeight: 800, color: '#FF4D6D' }}>The challenge</h3>
+              <p style={{ color: '#4B5563', lineHeight: 1.6 }}>Dojo was a new start up brand that came out of our client Paymentsense...</p>
+            </div>
+
+            {/* Rolling Numbers in Peach/Pink Rounded Cards */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '1.5rem', marginBottom: '4.5rem' }}>
+              {[
+                { num: `${counts.traffic}%`, lbl: 'Increase in monthly brand traffic' },
+                { num: `${counts.keywords}K`, lbl: 'Keywords pos 1-3' },
+                { num: `${counts.clicks}+`, lbl: 'Link clicks directly into sales' },
+                { num: `${counts.buyers}K`, lbl: 'Increase buyer in marketplace' }
+              ].map((m, i) => (
+                <div key={i} style={{ backgroundColor: '#FFF2F4', border: '1.5px solid #FFD3D9', padding: '2rem 1.5rem', borderRadius: '24px', textAlign: 'center' }}>
+                  <div style={{ fontSize: '3rem', fontWeight: 900, color: '#FF4D6D', fontFamily: 'monospace' }}>{m.num}</div>
+                  <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#4B5563' }}>{m.lbl}</div>
+                </div>
+              ))}
+            </div>
+
+            <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '1.5rem' }}>Gallery</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '1.5rem' }}>
+              {[1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} style={{ height: '220px', backgroundColor: '#FF5E7E', borderRadius: '24px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#FFF', fontWeight: 800 }}>Gallery Asset #{i}</div>
+              ))}
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function ArticlesPage() {
+      const [page, setPage] = useState(1);
+      return (
+        <div style={{ padding: '2.5rem 0 5rem 0' }}>
+          <div className="container-custom">
+            <div style={{ backgroundColor: '#FFF2F4', borderRadius: '32px', border: '1.5px solid #FFD3D9', padding: '3.5rem 3rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '2.5rem', alignItems: 'center', marginBottom: '4.5rem' }}>
+              <div>
+                <h1 style={{ fontSize: '3.2rem', fontWeight: 900, marginBottom: '1rem' }}>Enjoy the 🍑 Juicy Articles</h1>
+                <p style={{ color: '#4B5563', maxWidth: '540px' }}>Lorem ipsum dolor sit amet, consectetuer adipiscing elit.</p>
+              </div>
+              <div style={{ textAlign: 'center' }}><MascotIcon type="researcher" size={150} /></div>
+            </div>
+
+            <h2 style={{ fontSize: '2rem', fontWeight: 900, marginBottom: '2rem' }}>Recent Articles</h2>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '2rem', marginBottom: '4.5rem' }}>
+              {[1, 2, 3, 4, 5, 6].map(i => (
+                <div key={i} style={{ border: '1.5px solid #E5E7EB', borderRadius: '24px', overflow: 'hidden', backgroundColor: '#FFF' }}>
+                  <WireframePlaceholder height="180px" label={`Recent Article #${i}`} />
+                  <div style={{ padding: '1.25rem' }}>
+                    <span style={{ fontSize: '0.75rem', fontWeight: 800, color: '#FF4D6D', backgroundColor: '#FFE4E6', padding: '4px 10px', borderRadius: '6px' }}>SEO & AI Search</span>
+                    <h3 style={{ fontWeight: 800, fontSize: '1.05rem', marginTop: '6px' }}>How Google’s AI Overviews Reshape CTR</h3>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div style={{ borderTop: '2px solid #E5E7EB', paddingTop: '3.5rem' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2rem' }}>
+                <h2 style={{ fontSize: '2rem', fontWeight: 900 }}>Previous articles you might missed</h2>
+                <div style={{ display: 'flex', gap: '10px' }}>
+                  <select style={{ padding: '10px 20px', borderRadius: '9999px', backgroundColor: '#FFC000', fontWeight: 800, border: 'none' }}><option>Year: 2026</option></select>
+                  <select style={{ padding: '10px 20px', borderRadius: '9999px', backgroundColor: '#FFC000', fontWeight: 800, border: 'none' }}><option>Month: All</option></select>
+                </div>
+              </div>
+              
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '1.5rem', marginBottom: '2.5rem' }}>
+                {[1, 2, 3].map(i => (
+                  <div key={i} style={{ border: '1.5px solid #E5E7EB', borderRadius: '24px', overflow: 'hidden', backgroundColor: '#FFF' }}>
+                    <WireframePlaceholder height="160px" label={`Archived Article #${page}-${i}`} />
+                    <div style={{ padding: '1.25rem', fontWeight: 800 }}>Archived Piece (Page {page})</div>
+                  </div>
+                ))}
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'center', gap: '8px' }}>
+                {[1, 2, 3, 4, 5].map(num => (
+                  <button key={num} onClick={() => setPage(num)} style={{ width: '42px', height: '42px', borderRadius: '50%', backgroundColor: page === num ? '#FFC000' : '#FFF', border: '1px solid #D1D5DB', fontWeight: 800, cursor: 'pointer' }}>
+                    {num}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    function Footer({ onNavigate }) {
+      return (
+        <footer style={{ marginTop: '5rem', backgroundColor: '#FFC800', padding: '3.5rem 0', color: '#1F2937' }}>
+          <div className="container-custom" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem' }}>
+            <div>
+              <h3 style={{ fontWeight: 900, fontSize: '1.4rem', marginBottom: '8px' }}>buahpikiran.id</h3>
+              <p style={{ fontSize: '0.9rem', lineHeight: 1.6 }}>Menara Sentraya Lt-10 Unit A6<br />Jl. Iskandarsyah Raya No. 1A Melawai, Jakarta Selatan</p>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+              {['home', 'about', 'works', 'contact'].map(r => (
+                <button key={r} onClick={() => { onNavigate(r); window.scrollTo({ top: 0, behavior: 'smooth' }); }} style={{ background: 'none', border: 'none', textAlign: 'left', fontWeight: 800, textTransform: 'uppercase', cursor: 'pointer' }}>
+                  {r}
+                </button>
+              ))}
+            </div>
+          </div>
+        </footer>
+      );
+    }
+
+    // --- Main App ---
+    function App() {
+      const [page, setPage] = useState('home');
+      const [params, setParams] = useState({});
+
+      const nav = (p, q = {}) => {
+        setPage(p);
+        setParams(q);
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      };
+
+      return (
+        <div>
+          {/* Peach/Pink Rounded Header / Nav Box (as in document) */}
+          <header style={{ position: 'sticky', top: '12px', zIndex: 100, padding: '0 1.25rem', marginBottom: '1rem' }}>
+            <div className="container-custom" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '62px', backgroundColor: '#FFCCD2', borderRadius: '9999px', padding: '0 2rem', boxShadow: '0 4px 16px rgba(255,120,140,0.15)', border: '1px solid #FFAEB8' }}>
+              <div onClick={() => nav('home')} style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer' }}>
+                <MascotIcon type="logo" size={32} />
+                <div style={{ fontWeight: 900, fontSize: '1.15rem' }}>
+                  BUAH <span style={{ color: '#E11D48' }}>PIKIRAN</span>
+                </div>
+              </div>
+              <nav style={{ display: 'flex', gap: '2rem' }}>
+                {['about', 'works', 'articles', 'contact'].map(id => (
+                  <button key={id} onClick={() => nav(id)} style={{ background: 'none', border: 'none', fontWeight: page === id ? 900 : 700, color: page === id ? '#991B1B' : '#374151', cursor: 'pointer', textTransform: 'capitalize' }}>
+                    {id === 'about' ? 'About Us' : id === 'works' ? 'Our Works' : id}
+                  </button>
+                ))}
+              </nav>
+            </div>
+          </header>
+
+          {page === 'home' && <HomePage onNavigate={nav} />}
+          {page === 'about' && <AboutPage onNavigate={nav} />}
+          {page === 'works' && <WorksPage onNavigate={nav} />}
+          {page === 'case-study' && <CaseStudyDetailPage onNavigate={nav} />}
+          {page === 'articles' && <ArticlesPage onNavigate={nav} />}
+          {page === 'contact' && <ContactPage queryParams={params} />}
+
+          <Footer onNavigate={nav} />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+  </script>
+</body>
+</html>
