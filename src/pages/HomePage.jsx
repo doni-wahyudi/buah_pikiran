@@ -51,10 +51,9 @@ export default function HomePage({ onNavigate }) {
     <div style={{ paddingBottom: '3rem' }}>
       {/* SECTION 1: HERO */}
       <section style={{ padding: '3.5rem 0 3rem 0', textAlign: 'center' }}>
+        <div className="container-custom">
         <div
-          className="container-custom"
           style={{
-            maxWidth: '920px',
             backgroundColor: '#FFF8F7',
             padding: '3.5rem 2rem',
             borderRadius: '32px',
@@ -75,6 +74,7 @@ export default function HomePage({ onNavigate }) {
             Independent digital <span style={{ fontSize: '1.3rem' }}>🍑</span> agency based in Indonesia since 2019.
             We partner with local and international brands and institutions to build their brand, digital presence and campaigns.
           </p>
+        </div>
         </div>
       </section>
 

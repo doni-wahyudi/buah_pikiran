@@ -10,15 +10,15 @@ export default function Navbar({ currentPage, onNavigate }) {
   ];
 
   return (
-    <header style={{ position: 'sticky', top: '12px', zIndex: 100, padding: '0 1.25rem', marginBottom: '1rem' }}>
+    <header style={{ position: 'sticky', top: '12px', zIndex: 100, marginBottom: '1rem' }}>
+      <div className="container-custom" style={{ padding: '0 1.5rem' }}>
       <div
-        className="container-custom"
         style={{
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'space-between',
           height: '62px',
-          backgroundColor: '#FFCCD2', // Peach/pink rounded box as in document
+          backgroundColor: '#FFCCD2',
           borderRadius: '9999px',
           padding: '0 2rem',
           boxShadow: '0 4px 16px rgba(255, 120, 140, 0.15)',
@@ -74,6 +74,7 @@ export default function Navbar({ currentPage, onNavigate }) {
             );
           })}
         </nav>
+      </div>
       </div>
     </header>
   );

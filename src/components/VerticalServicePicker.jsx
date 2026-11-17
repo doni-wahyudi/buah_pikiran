@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 
 const SERVICES = [
   '360° Campaign',
@@ -10,32 +10,71 @@ const SERVICES = [
   'Marketing strategy'
 ];
 
+const N = SERVICES.length;
+// Triple the array for infinite loop illusion
+const CLONED = [...SERVICES, ...SERVICES, ...SERVICES];
+
+const ITEM_HEIGHT = 48;
+const GAP = 10;
+const STEP = ITEM_HEIGHT + GAP;
+
 export default function VerticalServicePicker({ selectedService, onSelectService, onNext }) {
-  const currentIndex = SERVICES.indexOf(selectedService) !== -1 
-    ? SERVICES.indexOf(selectedService) 
-    : 3; // default 'SEO'
+  // Start in the middle set so we can go up or down
+  const initialRaw = N + (SERVICES.indexOf(selectedService) !== -1 ? SERVICES.indexOf(selectedService) : 3);
+  const [rawIndex, setRawIndex] = useState(initialRaw);
+  const [animated, setAnimated] = useState(true);
+  const isTransitioning = useRef(false);
 
-  // Height of each pill row in px
-  const ITEM_HEIGHT = 48;
-  const GAP = 10;
-  const TOTAL_ITEM_STEP = ITEM_HEIGHT + GAP;
+  // translateY: center item is at visual center (96px offset for the 240px window)
+  const translateY = 96 - rawIndex * STEP;
 
-  // Clicking an item above or below
-  const handleItemClick = (index) => {
-    onSelectService(SERVICES[index]);
-  };
+  const goUp = useCallback(() => {
+    if (isTransitioning.current) return;
+    isTransitioning.current = true;
+    setAnimated(true);
+    setRawIndex(prev => {
+      const next = prev - 1;
+      onSelectService(CLONED[((next % N) + N) % N]);
+      return next;
+    });
+  }, [onSelectService]);
 
-  const handlePrev = () => {
-    if (currentIndex > 0) {
-      onSelectService(SERVICES[currentIndex - 1]);
+  const goDown = useCallback(() => {
+    if (isTransitioning.current) return;
+    isTransitioning.current = true;
+    setAnimated(true);
+    setRawIndex(prev => {
+      const next = prev + 1;
+      onSelectService(CLONED[((next % N) + N) % N]);
+      return next;
+    });
+  }, [onSelectService]);
+
+  const handleTransitionEnd = useCallback(() => {
+    isTransitioning.current = false;
+    // Silently teleport back into middle set if we drifted to outer sets
+    setRawIndex(prev => {
+      if (prev < N) {
+        // jumped into first clone set → reset to middle set equivalent
+        setAnimated(false);
+        return prev + N;
+      } else if (prev >= 2 * N) {
+        // jumped into third clone set → reset to middle set equivalent
+        setAnimated(false);
+        return prev - N;
+      }
+      return prev;
+    });
+  }, []);
+
+  // After turning off animation for teleport, re-enable on next frame
+  const handleAfterTeleport = useCallback(() => {
+    if (!animated) {
+      requestAnimationFrame(() => setAnimated(true));
     }
-  };
+  }, [animated]);
 
-  const handleNext = () => {
-    if (currentIndex < SERVICES.length - 1) {
-      onSelectService(SERVICES[currentIndex + 1]);
-    }
-  };
+  const currentVisualIndex = ((rawIndex % N) + N) % N;
 
   return (
     <div
@@ -46,7 +85,7 @@ export default function VerticalServicePicker({ selectedService, onSelectService
         flexWrap: 'wrap',
         gap: '2rem',
         padding: '3rem 2.5rem',
-        backgroundColor: '#FFF0F2', // Soft peach/pink rounded box as in document
+        backgroundColor: '#FFF0F2',
         borderRadius: '32px',
         border: '2px dashed #FFB8C2',
         position: 'relative',
@@ -60,7 +99,7 @@ export default function VerticalServicePicker({ selectedService, onSelectService
         </h3>
       </div>
 
-      {/* Center: Vertical Slot / Drum Picker (Scrolled vertically by clicking items above/below) */}
+      {/* Center: Infinite Vertical Drum Picker */}
       <div
         style={{
           flex: '1 1 340px',
@@ -73,65 +112,68 @@ export default function VerticalServicePicker({ selectedService, onSelectService
           overflow: 'hidden'
         }}
       >
-        {/* Top Fade Gradient & Up Click Chevron */}
+        {/* Top fade + click area → go UP (previous item) */}
         <div
-          onClick={handlePrev}
-          title={currentIndex > 0 ? `Click to scroll up to ${SERVICES[currentIndex - 1]}` : ''}
+          onClick={goUp}
           style={{
             position: 'absolute',
             top: 0,
             left: 0,
             right: 0,
-            height: '48px',
-            background: 'linear-gradient(to bottom, #FFF0F2 40%, rgba(255, 240, 242, 0))',
+            height: '56px',
+            background: 'linear-gradient(to bottom, #FFF0F2 45%, rgba(255, 240, 242, 0))',
             zIndex: 10,
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'center',
-            cursor: currentIndex > 0 ? 'pointer' : 'default',
-            color: currentIndex > 0 ? '#FF5E7E' : 'transparent',
-            fontSize: '1rem',
-            paddingTop: '4px',
+            cursor: 'pointer',
+            paddingTop: '6px',
             userSelect: 'none'
           }}
         >
-          {currentIndex > 0 && <span style={{ fontSize: '0.85rem', fontWeight: 900 }}>▲</span>}
+          <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#FF5E7E' }}>▲</span>
         </div>
 
-        {/* Vertical Drum Track */}
+        {/* Drum track — renders CLONED (3× array) */}
         <div
+          onTransitionEnd={handleTransitionEnd}
+          onAnimationEnd={handleAfterTeleport}
           style={{
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
             gap: `${GAP}px`,
-            transform: `translateY(${96 - currentIndex * TOTAL_ITEM_STEP}px)`,
-            transition: 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)',
+            transform: `translateY(${translateY}px)`,
+            transition: animated ? 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)' : 'none',
             willChange: 'transform'
           }}
         >
-          {SERVICES.map((service, idx) => {
-            const isCenter = idx === currentIndex;
-            const distance = Math.abs(idx - currentIndex);
+          {CLONED.map((service, idx) => {
+            const visualDist = idx - rawIndex;
+            const isCenter = visualDist === 0;
+            const distance = Math.abs(visualDist);
 
-            // Calculate subtle opacity and scale based on distance from center
             let opacity = 1;
             let scale = 1;
-            if (distance === 1) {
-              opacity = 0.7;
-              scale = 0.94;
-            } else if (distance === 2) {
-              opacity = 0.45;
-              scale = 0.88;
-            } else if (distance >= 3) {
-              opacity = 0.2;
-              scale = 0.82;
-            }
+            if (distance === 1) { opacity = 0.7; scale = 0.94; }
+            else if (distance === 2) { opacity = 0.45; scale = 0.88; }
+            else if (distance >= 3) { opacity = 0.15; scale = 0.82; }
+
+            // Only render items within visible range to avoid huge DOM
+            if (distance > 3) return null;
 
             return (
               <button
-                key={service}
-                onClick={() => handleItemClick(idx)}
+                key={`${service}-${idx}`}
+                onClick={() => {
+                  const diff = idx - rawIndex;
+                  if (diff < 0) {
+                    // above center → go up N times
+                    for (let i = 0; i < Math.abs(diff); i++) goUp();
+                  } else if (diff > 0) {
+                    for (let i = 0; i < diff; i++) goDown();
+                  }
+                }}
                 style={{
                   height: `${ITEM_HEIGHT}px`,
                   minWidth: '220px',
@@ -153,7 +195,8 @@ export default function VerticalServicePicker({ selectedService, onSelectService
                   display: 'flex',
                   alignItems: 'center',
                   justifyContent: 'center',
-                  userSelect: 'none'
+                  userSelect: 'none',
+                  flexShrink: 0
                 }}
               >
                 {service}
@@ -162,29 +205,26 @@ export default function VerticalServicePicker({ selectedService, onSelectService
           })}
         </div>
 
-        {/* Bottom Fade Gradient & Down Click Chevron */}
+        {/* Bottom fade + click area → go DOWN (next item) */}
         <div
-          onClick={handleNext}
-          title={currentIndex < SERVICES.length - 1 ? `Click to scroll down to ${SERVICES[currentIndex + 1]}` : ''}
+          onClick={goDown}
           style={{
             position: 'absolute',
             bottom: 0,
             left: 0,
             right: 0,
-            height: '48px',
-            background: 'linear-gradient(to top, #FFF0F2 40%, rgba(255, 240, 242, 0))',
+            height: '56px',
+            background: 'linear-gradient(to top, #FFF0F2 45%, rgba(255, 240, 242, 0))',
             zIndex: 10,
             display: 'flex',
             alignItems: 'flex-end',
             justifyContent: 'center',
-            cursor: currentIndex < SERVICES.length - 1 ? 'pointer' : 'default',
-            color: currentIndex < SERVICES.length - 1 ? '#FF5E7E' : 'transparent',
-            fontSize: '1rem',
-            paddingBottom: '4px',
+            cursor: 'pointer',
+            paddingBottom: '6px',
             userSelect: 'none'
           }}
         >
-          {currentIndex < SERVICES.length - 1 && <span style={{ fontSize: '0.85rem', fontWeight: 900 }}>▼</span>}
+          <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#FF5E7E' }}>▼</span>
         </div>
       </div>
 
