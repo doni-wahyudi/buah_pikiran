@@ -441,7 +441,7 @@ export default function HomePage({ onNavigate }) {
       {/* SECTION 7: RECENT PROJECT */}
       <section style={{ padding: '4.5rem 0' }}>
         <div className="container-custom">
-          <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '2rem', alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '2rem', alignItems: 'center' }}>
             
             {/* Left Intro Card */}
             <div>
