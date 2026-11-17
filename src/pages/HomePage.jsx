@@ -441,7 +441,7 @@ export default function HomePage({ onNavigate }) {
       {/* SECTION 7: RECENT PROJECT */}
       <section style={{ padding: '4.5rem 0' }}>
         <div className="container-custom">
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '2rem', alignItems: 'start' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '2rem', alignItems: 'start' }}>
             
             {/* Left Intro Card */}
             <div>
@@ -459,8 +459,8 @@ export default function HomePage({ onNavigate }) {
               </button>
             </div>
 
-            {/* Right Project Cards (3 Items with rounded corners) */}
-            <div style={{ gridColumn: 'span 2', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '1.5rem' }}>
+            {/* Right Project Cards — forced 3-column single row */}
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1.5rem' }}>
               {[
                 { id: 'femmy-fyber', name: 'FEMMY FYBER', date: 'May 2026', tag: 'Featured' },
                 { id: 'komix', name: 'KOMIX', date: 'Mar 2026', tag: 'Featured' },
