@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState } from 'react';
 
 const SERVICES = [
   '360° Campaign',
@@ -11,70 +11,35 @@ const SERVICES = [
 ];
 
 const N = SERVICES.length;
-// Triple the array for infinite loop illusion
-const CLONED = [...SERVICES, ...SERVICES, ...SERVICES];
-
 const ITEM_HEIGHT = 48;
 const GAP = 10;
 const STEP = ITEM_HEIGHT + GAP;
+// Visual center of the 240px drum window
+const CENTER_Y = 96;
 
 export default function VerticalServicePicker({ selectedService, onSelectService, onNext }) {
-  // Start in the middle set so we can go up or down
-  const initialRaw = N + (SERVICES.indexOf(selectedService) !== -1 ? SERVICES.indexOf(selectedService) : 3);
-  const [rawIndex, setRawIndex] = useState(initialRaw);
-  const [animated, setAnimated] = useState(true);
-  const isTransitioning = useRef(false);
+  const initIdx = SERVICES.indexOf(selectedService) !== -1 ? SERVICES.indexOf(selectedService) : 3;
+  const [centerIdx, setCenterIdx] = useState(initIdx);
 
-  // translateY: center item is at visual center (96px offset for the 240px window)
-  const translateY = 96 - rawIndex * STEP;
-
-  const goUp = useCallback(() => {
-    if (isTransitioning.current) return;
-    isTransitioning.current = true;
-    setAnimated(true);
-    setRawIndex(prev => {
-      const next = prev - 1;
-      onSelectService(CLONED[((next % N) + N) % N]);
+  const goUp = () => {
+    setCenterIdx(prev => {
+      const next = (prev - 1 + N) % N;
+      onSelectService(SERVICES[next]);
       return next;
     });
-  }, [onSelectService]);
+  };
 
-  const goDown = useCallback(() => {
-    if (isTransitioning.current) return;
-    isTransitioning.current = true;
-    setAnimated(true);
-    setRawIndex(prev => {
-      const next = prev + 1;
-      onSelectService(CLONED[((next % N) + N) % N]);
+  const goDown = () => {
+    setCenterIdx(prev => {
+      const next = (prev + 1) % N;
+      onSelectService(SERVICES[next]);
       return next;
     });
-  }, [onSelectService]);
+  };
 
-  const handleTransitionEnd = useCallback(() => {
-    isTransitioning.current = false;
-    // Silently teleport back into middle set if we drifted to outer sets
-    setRawIndex(prev => {
-      if (prev < N) {
-        // jumped into first clone set → reset to middle set equivalent
-        setAnimated(false);
-        return prev + N;
-      } else if (prev >= 2 * N) {
-        // jumped into third clone set → reset to middle set equivalent
-        setAnimated(false);
-        return prev - N;
-      }
-      return prev;
-    });
-  }, []);
-
-  // After turning off animation for teleport, re-enable on next frame
-  const handleAfterTeleport = useCallback(() => {
-    if (!animated) {
-      requestAnimationFrame(() => setAnimated(true));
-    }
-  }, [animated]);
-
-  const currentVisualIndex = ((rawIndex % N) + N) % N;
+  // Render a window of 5 slots: center ± 2
+  // Each slot offset from center: -2, -1, 0, +1, +2
+  const slots = [-2, -1, 0, 1, 2];
 
   return (
     <div
@@ -99,127 +64,100 @@ export default function VerticalServicePicker({ selectedService, onSelectService
         </h3>
       </div>
 
-      {/* Center: Infinite Vertical Drum Picker */}
+      {/* Center: Drum picker */}
       <div
         style={{
-          flex: '1 1 340px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
+          flex: '1 1 300px',
           position: 'relative',
           height: '240px',
           overflow: 'hidden'
         }}
       >
-        {/* Top fade + click area → go UP (previous item) */}
+        {/* Top click zone */}
         <div
           onClick={goUp}
           style={{
             position: 'absolute',
-            top: 0,
-            left: 0,
-            right: 0,
-            height: '56px',
-            background: 'linear-gradient(to bottom, #FFF0F2 45%, rgba(255, 240, 242, 0))',
+            top: 0, left: 0, right: 0,
+            height: '72px',
+            background: 'linear-gradient(to bottom, #FFF0F2 50%, transparent)',
             zIndex: 10,
             display: 'flex',
             alignItems: 'flex-start',
             justifyContent: 'center',
-            cursor: 'pointer',
             paddingTop: '6px',
+            cursor: 'pointer',
             userSelect: 'none'
           }}
         >
           <span style={{ fontSize: '0.85rem', fontWeight: 900, color: '#FF5E7E' }}>▲</span>
         </div>
 
-        {/* Drum track — renders CLONED (3× array) */}
-        <div
-          onTransitionEnd={handleTransitionEnd}
-          onAnimationEnd={handleAfterTeleport}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: `${GAP}px`,
-            transform: `translateY(${translateY}px)`,
-            transition: animated ? 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)' : 'none',
-            willChange: 'transform'
-          }}
-        >
-          {CLONED.map((service, idx) => {
-            const visualDist = idx - rawIndex;
-            const isCenter = visualDist === 0;
-            const distance = Math.abs(visualDist);
+        {/* Absolutely positioned items */}
+        {slots.map(offset => {
+          const serviceIdx = ((centerIdx + offset) % N + N) % N;
+          const service = SERVICES[serviceIdx];
+          const isCenter = offset === 0;
+          const distance = Math.abs(offset);
 
-            let opacity = 1;
-            let scale = 1;
-            if (distance === 1) { opacity = 0.7; scale = 0.94; }
-            else if (distance === 2) { opacity = 0.45; scale = 0.88; }
-            else if (distance >= 3) { opacity = 0.15; scale = 0.82; }
-            // Far items stay in DOM (to keep translateY math correct) but are invisible
-            if (distance > 4) { opacity = 0; }
+          let opacity = 1;
+          let scale = 1;
+          if (distance === 1) { opacity = 0.65; scale = 0.93; }
+          else if (distance === 2) { opacity = 0.3; scale = 0.85; }
 
-            return (
-              <button
-                key={`${service}-${idx}`}
-                onClick={() => {
-                  const diff = idx - rawIndex;
-                  if (diff < 0) {
-                    // above center → go up N times
-                    for (let i = 0; i < Math.abs(diff); i++) goUp();
-                  } else if (diff > 0) {
-                    for (let i = 0; i < diff; i++) goDown();
-                  }
-                }}
-                style={{
-                  height: `${ITEM_HEIGHT}px`,
-                  minWidth: '220px',
-                  padding: '0 26px',
-                  borderRadius: '9999px',
-                  border: isCenter ? '2px solid #EAB308' : '1px solid #E5E7EB',
-                  backgroundColor: isCenter ? '#FFC000' : '#FFFFFF',
-                  color: isCenter ? '#111827' : '#4B5563',
-                  fontWeight: isCenter ? 900 : 700,
-                  fontSize: isCenter ? '1.05rem' : '0.92rem',
-                  boxShadow: isCenter
-                    ? '0 6px 16px rgba(255, 192, 0, 0.45)'
-                    : '0 2px 6px rgba(0, 0, 0, 0.04)',
-                  cursor: 'pointer',
-                  opacity,
-                  transform: `scale(${scale})`,
-                  transition: 'all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                  whiteSpace: 'nowrap',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  userSelect: 'none',
-                  flexShrink: 0
-                }}
-              >
-                {service}
-              </button>
-            );
-          })}
-        </div>
+          // top position: CENTER_Y centers the item vertically
+          const topPx = CENTER_Y + offset * STEP;
 
-        {/* Bottom fade + click area → go DOWN (next item) */}
+          return (
+            <div
+              key={offset}
+              onClick={offset < 0 ? goUp : offset > 0 ? goDown : undefined}
+              style={{
+                position: 'absolute',
+                left: '50%',
+                top: `${topPx}px`,
+                transform: `translateX(-50%) scale(${scale})`,
+                transition: 'top 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.35s ease, transform 0.35s ease',
+                opacity,
+                cursor: offset !== 0 ? 'pointer' : 'default',
+                zIndex: isCenter ? 5 : 3,
+                width: '240px',
+                height: `${ITEM_HEIGHT}px`,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                borderRadius: '9999px',
+                border: isCenter ? '2px solid #EAB308' : '1px solid #E5E7EB',
+                backgroundColor: isCenter ? '#FFC000' : '#FFFFFF',
+                color: isCenter ? '#111827' : '#4B5563',
+                fontWeight: isCenter ? 900 : 700,
+                fontSize: isCenter ? '1.05rem' : '0.92rem',
+                boxShadow: isCenter
+                  ? '0 6px 16px rgba(255, 192, 0, 0.45)'
+                  : '0 2px 6px rgba(0,0,0,0.04)',
+                whiteSpace: 'nowrap',
+                userSelect: 'none'
+              }}
+            >
+              {service}
+            </div>
+          );
+        })}
+
+        {/* Bottom click zone */}
         <div
           onClick={goDown}
           style={{
             position: 'absolute',
-            bottom: 0,
-            left: 0,
-            right: 0,
-            height: '56px',
-            background: 'linear-gradient(to top, #FFF0F2 45%, rgba(255, 240, 242, 0))',
+            bottom: 0, left: 0, right: 0,
+            height: '72px',
+            background: 'linear-gradient(to top, #FFF0F2 50%, transparent)',
             zIndex: 10,
             display: 'flex',
             alignItems: 'flex-end',
             justifyContent: 'center',
-            cursor: 'pointer',
             paddingBottom: '6px',
+            cursor: 'pointer',
             userSelect: 'none'
           }}
         >
