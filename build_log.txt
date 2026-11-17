@@ -1,0 +1,33 @@
+CMD: npm.cmd run build
+STDOUT: > buah-pikiran-wireframe@1.0.0 build
+> vite build
+
+[36mvite v5.4.21 [32mbuilding for production...[36m[39m
+transforming...
+[32m✓[39m 45 modules transformed.
+rendering chunks...
+computing gzip size...
+[2mdist/[22m[32mindex.html                 [39m[1m[2m  0.80 kB[22m[1m[22m[2m │ gzip:  0.47 kB[22m
+[2mdist/[22m[35massets/index-C1kKgLsY.css  [39m[1m[2m  3.35 kB[22m[1m[22m[2m │ gzip:  1.28 kB[22m
+[2mdist/[22m[36massets/index-Bxx4SEbG.js   [39m[1m[2m213.10 kB[22m[1m[22m[2m │ gzip: 60.59 kB[22m
+[32m✓ built in 909ms[39m
+STDERR: 
+RC: 0
+CMD: git add -A
+STDOUT: 
+STDERR: warning: in the working copy of '.github/workflows/deploy.yml', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'package.json', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/Navbar.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/components/VerticalServicePicker.jsx', LF will be replaced by CRLF the next time Git touches it
+warning: in the working copy of 'src/pages/HomePage.jsx', LF will be replaced by CRLF the next time Git touches it
+RC: 0
+CMD: git commit -m fix: infinite drum picker + unified container width alignment
+STDOUT: [main 446e1ee] fix: infinite drum picker + unified container width alignment
+ 4 files changed, 113 insertions(+), 72 deletions(-)
+STDERR: 
+RC: 0
+CMD: git push origin main
+STDOUT: 
+STDERR: To https://github.com/doni-wahyudi/buah_pikiran.git
+   1abb33b..446e1ee  main -> main
+RC: 0

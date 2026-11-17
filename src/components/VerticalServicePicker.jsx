@@ -158,9 +158,8 @@ export default function VerticalServicePicker({ selectedService, onSelectService
             if (distance === 1) { opacity = 0.7; scale = 0.94; }
             else if (distance === 2) { opacity = 0.45; scale = 0.88; }
             else if (distance >= 3) { opacity = 0.15; scale = 0.82; }
-
-            // Only render items within visible range to avoid huge DOM
-            if (distance > 3) return null;
+            // Far items stay in DOM (to keep translateY math correct) but are invisible
+            if (distance > 4) { opacity = 0; }
 
             return (
               <button
