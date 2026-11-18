@@ -1,8 +1,8 @@
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
 
 :root {
+  --font-heading: 'Syne', system-ui, sans-serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --font-mono: 'Space Grotesk', monospace;
   --primary-pink: #FF6B6B;
   --primary-peach: #FFA07A;
   --accent-peach-light: #FFF0ED;
@@ -30,6 +30,12 @@ body {
   line-height: 1.5;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Headings use the display font */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.02em;
 }
 
 /* Layout Utilities */
@@ -100,7 +106,8 @@ body {
 .wireframe-btn-peach {
   background-color: #FFC000;
   color: #111827;
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-weight: 700;
   padding: 12px 28px;
   border-radius: 9999px;
   border: none;
@@ -120,7 +127,8 @@ body {
 .wireframe-btn-pink {
   background-color: #FF4D6D;
   color: #FFFFFF;
-  font-weight: 800;
+  font-family: var(--font-heading);
+  font-weight: 700;
   padding: 12px 28px;
   border-radius: 9999px;
   border: none;
