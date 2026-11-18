@@ -6,7 +6,7 @@
   <title>Buah Pikiran — Wireframe Prototype</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   
   <!-- React & ReactDOM Standalone -->
   <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
@@ -15,11 +15,13 @@
 
   <style>
     :root {
+      --font-heading: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
       --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-      --font-mono: 'Space Grotesk', monospace;
+      --font-mono: monospace;
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: var(--font-sans); background-color: #FAFAFB; color: #111827; line-height: 1.5; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
+    h1, h2, h3, h4, h5, h6 { font-family: var(--font-heading); letter-spacing: -0.02em; line-height: 1.15; }
+      body { font-family: var(--font-sans); background-color: #FAFAFB; color: #111827; line-height: 1.5; overflow-x: hidden; -webkit-font-smoothing: antialiased; }
     
     .container-custom { max-width: 1120px; margin: 0 auto; padding: 0 1.5rem; }
 

@@ -31,7 +31,7 @@ export default function Navbar({ currentPage, onNavigate }) {
           style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', userSelect: 'none' }}
         >
           <MascotIcon type="logo" size={32} />
-          <div style={{ fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: '1.15rem', letterSpacing: '-0.03em', lineHeight: 1.05, color: '#1F2937' }}>
+          <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.02em', lineHeight: 1.05, color: '#1F2937' }}>
             BUAH <span style={{ color: '#E11D48' }}>PIKIRAN</span>
           </div>
         </div>
@@ -47,8 +47,9 @@ export default function Navbar({ currentPage, onNavigate }) {
                 style={{
                   background: 'none',
                   border: 'none',
-                  fontSize: '0.95rem',
-                  fontWeight: isActive ? 900 : 700,
+                  fontFamily: 'var(--font-heading)',
+                  fontSize: '1.02rem',
+                  fontWeight: isActive ? 800 : 600,
                   color: isActive ? '#991B1B' : '#374151',
                   cursor: 'pointer',
                   position: 'relative',

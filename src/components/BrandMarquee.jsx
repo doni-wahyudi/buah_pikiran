@@ -19,7 +19,7 @@ export default function BrandMarquee({ title = "Brands we've worked with" }) {
   return (
     <section style={{ padding: '3.5rem 0', backgroundColor: '#FFFFFF', borderTop: '1px solid #E5E7EB', borderBottom: '1px solid #E5E7EB', overflow: 'hidden' }}>
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#111827', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
+        <h3 style={{ fontSize: '1.75rem', fontWeight: 800, color: '#111827', letterSpacing: '-0.02em', fontFamily: 'var(--font-heading)' }}>
           {title}
         </h3>
       </div>
