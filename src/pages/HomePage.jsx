@@ -52,29 +52,29 @@ export default function HomePage({ onNavigate }) {
       {/* SECTION 1: HERO */}
       <section style={{ padding: '3.5rem 0 3rem 0', textAlign: 'center' }}>
         <div className="container-custom">
-        <div
-          style={{
-            backgroundColor: '#FFF8F7',
-            padding: '3.5rem 2rem',
-            borderRadius: '32px',
-            border: '1px solid #FFE4E2'
-          }}
-        >
-          <h1 style={{ fontSize: 'clamp(2.4rem, 5vw, 3.8rem)', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.15, color: '#111827', marginBottom: '1.25rem' }}>
-            Hello!<br />
-            <span style={{ color: '#111827' }}>We Are </span>
-            <span style={{ color: '#FF4D6D' }}>Buah Pikiran</span>
-          </h1>
+          <div
+            style={{
+              backgroundColor: '#FFF8F7',
+              padding: '3.5rem 2rem',
+              borderRadius: '32px',
+              border: '1px solid #FFE4E2'
+            }}
+          >
+            <h1 style={{ fontSize: 'clamp(2.4rem, 5vw, 3.8rem)', fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.15, color: '#111827', marginBottom: '1.25rem' }}>
+              Hello!<br />
+              <span style={{ color: '#111827' }}>We Are </span>
+              <span style={{ color: '#FF4D6D' }}>Buah Pikiran</span>
+            </h1>
 
-          <div style={{ margin: '1.5rem 0' }}>
-            <MascotIcon type="hero" size={160} />
+            <div style={{ margin: '1.5rem 0' }}>
+              <MascotIcon type="hero" size={160} />
+            </div>
+
+            <p style={{ fontSize: '1.1rem', color: '#4B5563', lineHeight: 1.65, fontWeight: 500, maxWidth: '680px', margin: '0 auto' }}>
+              Independent digital <span style={{ fontSize: '1.3rem' }}>🍑</span> agency based in Indonesia since 2019.
+              We partner with local and international brands and institutions to build their brand, digital presence and campaigns.
+            </p>
           </div>
-
-          <p style={{ fontSize: '1.1rem', color: '#4B5563', lineHeight: 1.65, fontWeight: 500, maxWidth: '680px', margin: '0 auto' }}>
-            Independent digital <span style={{ fontSize: '1.3rem' }}>🍑</span> agency based in Indonesia since 2019.
-            We partner with local and international brands and institutions to build their brand, digital presence and campaigns.
-          </p>
-        </div>
         </div>
       </section>
 
@@ -82,7 +82,7 @@ export default function HomePage({ onNavigate }) {
       <section style={{ padding: '4rem 0' }}>
         <div className="container-custom">
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '3.5rem', alignItems: 'center' }}>
-            
+
             {/* Left Dynamic Showcase Container (Pink rounded box as in document) */}
             <div>
               <div
@@ -261,7 +261,7 @@ export default function HomePage({ onNavigate }) {
               <p style={{ fontSize: '1.15rem', fontStyle: 'italic', color: '#1F2937', lineHeight: 1.6, marginBottom: '1.5rem' }}>
                 "{testimonials[activeTestimonialIdx].quote}"
               </p>
-              
+
               <div style={{ display: 'flex', alignItems: 'center', gap: '14px' }}>
                 <div
                   style={{
@@ -442,7 +442,7 @@ export default function HomePage({ onNavigate }) {
       <section style={{ padding: '4.5rem 0' }}>
         <div className="container-custom">
           <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr', gap: '2rem', alignItems: 'center' }}>
-            
+
             {/* Left Intro Card */}
             <div>
               <h2 style={{ fontSize: '2.4rem', fontWeight: 800, color: '#111827', letterSpacing: '-0.02em', marginBottom: '0.75rem', lineHeight: 1.15 }}>
