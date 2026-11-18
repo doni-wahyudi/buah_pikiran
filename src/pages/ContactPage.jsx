@@ -60,7 +60,7 @@ export default function ContactPage({ queryParams }) {
             padding: '3rem 2rem'
           }}
         >
-          <div style={{ fontSize: '2.5rem', display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '1.25rem' }}>
+          <div style={{ fontSize: '1.9rem', display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '1.25rem' }}>
             <span>🍎</span><span>🍑</span><span>🍌</span><span>🍎</span><span>🍑</span><span>🍌</span>
           </div>
           
@@ -88,7 +88,7 @@ export default function ContactPage({ queryParams }) {
         >
           {isSubmitted ? (
             <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-              <div style={{ fontSize: '3.5rem', marginBottom: '1rem' }}>🎉</div>
+              <div style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>🎉</div>
               <h3 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#111827', marginBottom: '0.5rem' }}>
                 Thank you for reaching out!
               </h3>

@@ -105,7 +105,7 @@ export default function AboutPage({ onNavigate }) {
       <section style={{ padding: '4.5rem 0' }}>
         <div className="container-custom">
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <h2 style={{ fontSize: '2.4rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
               Our value
             </h2>
           </div>
@@ -147,7 +147,7 @@ export default function AboutPage({ onNavigate }) {
                   </p>
                 </div>
 
-                <div style={{ fontSize: '2rem', marginTop: '1.5rem', textAlign: 'right' }}>
+                <div style={{ fontSize: '1.65rem', marginTop: '1.5rem', textAlign: 'right' }}>
                   {val.icon}
                 </div>
               </div>
@@ -160,7 +160,7 @@ export default function AboutPage({ onNavigate }) {
       <section style={{ padding: '4.5rem 0' }}>
         <div className="container-custom">
           <div style={{ textAlign: 'center', marginBottom: '3rem' }}>
-            <h2 style={{ fontSize: '2.4rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
               Meet the Founders
             </h2>
           </div>
@@ -173,7 +173,7 @@ export default function AboutPage({ onNavigate }) {
                   {founder.avatarIcon}
                 </div>
 
-                <h3 style={{ fontSize: '1.3rem', fontWeight: 900, color: '#111827', marginBottom: '4px' }}>
+                <h3 style={{ fontSize: '1.1rem', fontWeight: 800, color: '#111827', marginBottom: '4px' }}>
                   {founder.name}
                 </h3>
                 <div style={{ fontSize: '0.9rem', color: '#6B7280', fontWeight: 600 }}>
@@ -236,7 +236,7 @@ export default function AboutPage({ onNavigate }) {
               textAlign: 'center'
             }}
           >
-            <h2 style={{ fontSize: '2.4rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '2.5rem' }}>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '2.5rem' }}>
               Our Signature Approach
             </h2>
 
@@ -307,7 +307,7 @@ export default function AboutPage({ onNavigate }) {
             padding: '3.5rem 2rem'
           }}
         >
-          <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '1.5rem' }}>
+          <h2 style={{ fontSize: '1.9rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '1.5rem' }}>
             Start your project with us!
           </h2>
 

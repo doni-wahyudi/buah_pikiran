@@ -19,7 +19,7 @@ export default function BrandMarquee({ title = "Brands we've worked with" }) {
   return (
     <section style={{ padding: '3.5rem 0', backgroundColor: '#FFFFFF', borderTop: '1px solid #E5E7EB', borderBottom: '1px solid #E5E7EB', overflow: 'hidden' }}>
       <div style={{ textAlign: 'center', marginBottom: '2rem' }}>
-        <h3 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
+        <h3 style={{ fontSize: '1.2rem', fontWeight: 700, color: '#111827', letterSpacing: '0.04em', textTransform: 'uppercase' }}>
           {title}
         </h3>
       </div>
@@ -58,7 +58,7 @@ export default function BrandMarquee({ title = "Brands we've worked with" }) {
                   background: '#FF7B7B'
                 }}
               />
-              <span style={{ fontWeight: 800, fontSize: '1.1rem', letterSpacing: '-0.02em', color: '#111827' }}>
+              <span style={{ fontWeight: 700, fontSize: '0.9rem', letterSpacing: '-0.01em', color: '#111827' }}>
                 {brand.name}
               </span>
               <span style={{ fontSize: '0.75rem', color: '#9CA3AF', textTransform: 'uppercase', fontWeight: 700 }}>

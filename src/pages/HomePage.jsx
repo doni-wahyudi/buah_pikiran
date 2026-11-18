@@ -60,7 +60,7 @@ export default function HomePage({ onNavigate }) {
             border: '1px solid #FFE4E2'
           }}
         >
-          <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 4rem)', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.1, color: '#111827', marginBottom: '1.25rem' }}>
+          <h1 style={{ fontSize: 'clamp(1.9rem, 3.5vw, 2.8rem)', fontWeight: 900, letterSpacing: '-0.03em', lineHeight: 1.1, color: '#111827', marginBottom: '1.25rem' }}>
             Hello!<br />
             <span style={{ color: '#111827' }}>We Are </span>
             <span style={{ color: '#FF4D6D' }}>Buah Pikiran</span>
@@ -70,7 +70,7 @@ export default function HomePage({ onNavigate }) {
             <MascotIcon type="hero" size={160} />
           </div>
 
-          <p style={{ fontSize: '1.2rem', color: '#4B5563', lineHeight: 1.6, fontWeight: 500, maxWidth: '680px', margin: '0 auto' }}>
+          <p style={{ fontSize: '1rem', color: '#4B5563', lineHeight: 1.65, fontWeight: 500, maxWidth: '640px', margin: '0 auto' }}>
             Independent digital <span style={{ fontSize: '1.3rem' }}>🍑</span> agency based in Indonesia since 2019.
             We partner with local and international brands and institutions to build their brand, digital presence and campaigns.
           </p>
@@ -167,10 +167,10 @@ export default function HomePage({ onNavigate }) {
 
             {/* Right Interactive Accordion */}
             <div>
-              <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#6B7280', marginBottom: '0.25rem' }}>
+              <div style={{ fontSize: '0.85rem', fontWeight: 700, color: '#6B7280', textTransform: 'uppercase', letterSpacing: '0.08em', marginBottom: '0.25rem' }}>
                 What we do?
               </div>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#111827', marginBottom: '1.75rem', letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: '1.9rem', fontWeight: 800, color: '#111827', marginBottom: '1.75rem' }}>
                 Performance
               </h2>
 
@@ -193,7 +193,7 @@ export default function HomePage({ onNavigate }) {
                     >
                       <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                         <span style={{ fontSize: '1.3rem' }}>🍑</span>
-                        <div style={{ fontWeight: 800, fontSize: '1.2rem', color: isExpanded ? '#FF4D6D' : '#1F2937' }}>
+                        <div style={{ fontWeight: 700, fontSize: '1rem', color: isExpanded ? '#FF4D6D' : '#1F2937' }}>
                           {svc.title}
                         </div>
                       </div>
@@ -235,7 +235,7 @@ export default function HomePage({ onNavigate }) {
             <div style={{ display: 'flex', justifyContent: 'center', gap: '6px', fontSize: '1.6rem', marginBottom: '0.5rem' }}>
               <span>🍑</span><span>🍑</span><span>🍑</span><span>🍑</span><span>🍑</span>
             </div>
-            <h2 style={{ fontSize: '2.4rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: '1.9rem', fontWeight: 800, color: '#111827' }}>
               What They Say About<br />Buah Pikiran
             </h2>
           </div>
@@ -370,7 +370,7 @@ export default function HomePage({ onNavigate }) {
       <section style={{ padding: '4.5rem 0' }}>
         <div className="container-custom">
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
-            <h2 style={{ fontSize: '2.2rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
+            <h2 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#111827' }}>
               Read the Juicy Articles
             </h2>
             <button
@@ -445,7 +445,7 @@ export default function HomePage({ onNavigate }) {
             
             {/* Left Intro Card */}
             <div>
-              <h2 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '0.75rem' }}>
+              <h2 style={{ fontSize: '1.9rem', fontWeight: 800, color: '#111827', marginBottom: '0.75rem' }}>
                 Recent<br />Project
               </h2>
               <p style={{ fontSize: '0.95rem', color: '#6B7280', lineHeight: 1.6, marginBottom: '1.5rem' }}>

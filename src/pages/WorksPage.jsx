@@ -75,7 +75,7 @@ export default function WorksPage({ onNavigate }) {
         >
           <div>
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.8rem)', fontWeight: 900, color: '#111827', letterSpacing: '-0.03em', lineHeight: 1.1 }}>
-              The problem<br />we <span style={{ fontSize: '2.8rem' }}>🍑</span> solved
+              The problem<br />we <span style={{ fontSize: '2.1rem' }}>🍑</span> solved
             </h1>
           </div>
 
@@ -204,7 +204,7 @@ export default function WorksPage({ onNavigate }) {
                 boxShadow: '0 8px 20px rgba(255, 94, 126, 0.2)'
               }}
             >
-              <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🖼️</div>
+              <div style={{ fontSize: '1.9rem', marginBottom: '8px' }}>🖼️</div>
               <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>Upcoming Project Slot</span>
             </div>
           </div>
@@ -225,7 +225,7 @@ export default function WorksPage({ onNavigate }) {
                 boxShadow: '0 8px 20px rgba(255, 94, 126, 0.2)'
               }}
             >
-              <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🖼️</div>
+              <div style={{ fontSize: '1.9rem', marginBottom: '8px' }}>🖼️</div>
               <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>Upcoming Project Slot</span>
             </div>
           </div>
@@ -246,7 +246,7 @@ export default function WorksPage({ onNavigate }) {
                 boxShadow: '0 8px 20px rgba(255, 94, 126, 0.2)'
               }}
             >
-              <div style={{ fontSize: '2.5rem', marginBottom: '8px' }}>🖼️</div>
+              <div style={{ fontSize: '1.9rem', marginBottom: '8px' }}>🖼️</div>
               <span style={{ fontWeight: 800, fontSize: '1.1rem' }}>Upcoming Project Slot</span>
             </div>
           </div>

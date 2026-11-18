@@ -59,7 +59,7 @@ export default function VerticalServicePicker({ selectedService, onSelectService
     >
       {/* Left: "I need" */}
       <div style={{ flex: '0 0 auto' }}>
-        <h3 style={{ fontSize: '2.5rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', margin: 0 }}>
+        <h3 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', letterSpacing: '-0.02em', margin: 0 }}>
           I need
         </h3>
       </div>

@@ -58,7 +58,7 @@ export default function CaseStudyDetailPage({ onNavigate, projectId = 'femmy-fyb
               </span>
             </div>
 
-            <h1 style={{ fontSize: '2.8rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '1.25rem' }}>
+            <h1 style={{ fontSize: '2.1rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '1.25rem' }}>
               FEMMY FYBER
             </h1>
 
@@ -79,7 +79,7 @@ export default function CaseStudyDetailPage({ onNavigate, projectId = 'femmy-fyb
             <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#FF4D6D', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: '0.5rem' }}>
               Objective
             </div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', lineHeight: 1.3 }}>
+            <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: '#111827', lineHeight: 1.3 }}>
               Launching Dojo in B2B UK market to half a bill £ revenue business in 5 years
             </h2>
           </div>
@@ -141,7 +141,7 @@ export default function CaseStudyDetailPage({ onNavigate, projectId = 'femmy-fyb
             <div style={{ fontSize: '0.9rem', fontWeight: 800, color: '#FF4D6D', textTransform: 'uppercase', marginBottom: '0.5rem' }}>
               What we did?
             </div>
-            <h2 style={{ fontSize: '2rem', fontWeight: 800, color: '#111827', lineHeight: 1.35 }}>
+            <h2 style={{ fontSize: '1.65rem', fontWeight: 800, color: '#111827', lineHeight: 1.35 }}>
               The Rise team on London streets showing just how much prescence Dojo now has on the highstreet
             </h2>
           </div>
@@ -164,7 +164,7 @@ export default function CaseStudyDetailPage({ onNavigate, projectId = 'femmy-fyb
                   boxShadow: '0 8px 16px rgba(255, 94, 126, 0.2)'
                 }}
               >
-                <div style={{ fontSize: '2rem', marginBottom: '6px' }}>🖼️</div>
+                <div style={{ fontSize: '1.65rem', marginBottom: '6px' }}>🖼️</div>
                 <span style={{ fontWeight: 800, fontSize: '0.95rem' }}>Gallery Asset #{i}</span>
               </div>
             ))}
@@ -173,7 +173,7 @@ export default function CaseStudyDetailPage({ onNavigate, projectId = 'femmy-fyb
 
         {/* Section: You may also like */}
         <section style={{ borderTop: '1px solid #E5E7EB', paddingTop: '4rem' }}>
-          <h2 style={{ fontSize: '2rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '2rem' }}>
+          <h2 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '2rem' }}>
             You may also like
           </h2>
 

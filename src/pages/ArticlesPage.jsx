@@ -102,7 +102,7 @@ export default function ArticlesPage() {
         >
           <div>
             <h1 style={{ fontSize: 'clamp(2.5rem, 5vw, 3.8rem)', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', lineHeight: 1.1, marginBottom: '1.25rem' }}>
-              Enjoy the <span style={{ fontSize: '2.8rem' }}>🍑</span><br />
+              Enjoy the <span style={{ fontSize: '2.1rem' }}>🍑</span><br />
               Juicy Articles
             </h1>
             <p style={{ fontSize: '1.15rem', color: '#4B5563', lineHeight: 1.6, maxWidth: '480px' }}>
@@ -166,7 +166,7 @@ export default function ArticlesPage() {
         <section style={{ borderTop: '2px solid #E5E7EB', paddingTop: '4rem' }}>
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '2.5rem', flexWrap: 'wrap', gap: '1rem' }}>
             <div>
-              <h2 style={{ fontSize: '2rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
+              <h2 style={{ fontSize: '1.65rem', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em' }}>
                 Previous articles you might missed
               </h2>
             </div>
