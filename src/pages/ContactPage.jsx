@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import MascotIcon from '../components/MascotIcon';
+import ArrowIcon from '../components/ArrowIcon';
 
 export default function ContactPage({ queryParams }) {
   const [inquiryType, setInquiryType] = useState('project');
 
   const servicesList = [
+    'Choose Services',
     'Digital PR',
     'SEO',
     'Content',
@@ -14,10 +17,16 @@ export default function ContactPage({ queryParams }) {
     'Resources',
     'Social Media',
     'Paid Ads',
-    'AOE Search'
+    'AOE Search',
+    '360° Campaign',
+    'Branding',
+    'Web design',
+    'KOL',
+    'Strategic communication',
+    'Marketing strategy'
   ];
 
-  const [selectedService, setSelectedService] = useState('SEO');
+  const [selectedService, setSelectedService] = useState('Choose services*');
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
   // Sync with incoming parameter from Homepage "I need [pill] Next ->"
@@ -26,11 +35,7 @@ export default function ContactPage({ queryParams }) {
       const match = servicesList.find(
         (s) => s.toLowerCase() === queryParams.preselectedService.toLowerCase()
       );
-      if (match) {
-        setSelectedService(match);
-      } else {
-        setSelectedService(queryParams.preselectedService);
-      }
+      setSelectedService(match || queryParams.preselectedService);
     }
   }, [queryParams]);
 
@@ -46,318 +51,403 @@ export default function ContactPage({ queryParams }) {
   };
 
   return (
-    <div style={{ padding: '2.5rem 0 5rem 0' }}>
-      <div className="container-custom" style={{ maxWidth: '820px' }}>
-        
-        {/* Top Fruits Row Banner (Peach/Pink Rounded Box) */}
-        <div
-          style={{
-            textAlign: 'center',
-            marginBottom: '2.5rem',
-            backgroundColor: '#FFF2F4', // Soft peach/pink rounded container
-            borderRadius: '32px',
-            border: '1.5px solid #FFD3D9',
-            padding: '3rem 2rem'
-          }}
-        >
-          <div style={{ fontSize: '1.9rem', display: 'flex', justifyContent: 'center', gap: '12px', marginBottom: '1.25rem' }}>
-            <span>🍎</span><span>🍑</span><span>🍌</span><span>🍎</span><span>🍑</span><span>🍌</span>
-          </div>
-          
-          <div style={{ fontSize: '1.1rem', fontWeight: 700, color: '#4B5563', marginBottom: '6px' }}>
+    <div style={{ padding: '2.5rem 0 4rem 0' }}>
+      <div className="container-custom" style={{ maxWidth: '880px' }}>
+        {/* Top Row of 6 Cute Fruit Mascots (Left-Aligned as in Page 3) */}
+        <div style={{ marginBottom: '2rem' }}>
+          <MascotIcon type="fruits-row" />
+        </div>
+
+        {/* Drop us hello at: hello@buahpikiran.id */}
+        <div style={{ marginBottom: '3.25rem' }}>
+          <div
+            style={{
+              fontSize: 'clamp(1.35rem, 2.4vw, 1.75rem)',
+              fontWeight: 400,
+              color: '#4A2511',
+              marginBottom: '0.15rem'
+            }}
+          >
             Drop us hello at:
           </div>
-          <div style={{ fontSize: 'clamp(2rem, 5vw, 3rem)', fontWeight: 900, color: '#111827', letterSpacing: '-0.02em', marginBottom: '2rem' }}>
+          <a
+            href="mailto:hello@buahpikiran.id"
+            style={{
+              fontSize: 'clamp(2.1rem, 4.8vw, 3.25rem)',
+              fontWeight: 800,
+              color: '#4A2511',
+              textDecoration: 'none',
+              letterSpacing: '-0.02em',
+              fontFamily: 'var(--font-heading)',
+              display: 'inline-block'
+            }}
+          >
             hello@buahpikiran.id
-          </div>
-
-          <div style={{ display: 'inline-block', backgroundColor: '#FFFFFF', border: '1px solid #FFCCD5', padding: '8px 26px', borderRadius: '9999px', fontSize: '0.92rem', fontWeight: 800, color: '#374151', letterSpacing: '0.04em' }}>
-            OR, LET US CONTACT YOU
-          </div>
+          </a>
         </div>
 
-        {/* Form Container (Peach/Pink Rounded Box) */}
-        <div
-          style={{
-            backgroundColor: '#FFF8F9', // Soft peach/pink rounded box as in document
-            borderRadius: '32px',
-            border: '2px solid #FFCCD5',
-            padding: '3rem 2.5rem',
-            boxShadow: '0 10px 25px -5px rgba(255, 120, 140, 0.08)'
-          }}
-        >
-          {isSubmitted ? (
-            <div style={{ textAlign: 'center', padding: '3rem 1rem' }}>
-              <div style={{ fontSize: '2.2rem', marginBottom: '1rem' }}>🎉</div>
-              <h3 style={{ fontSize: '1.8rem', fontWeight: 900, color: '#111827', marginBottom: '0.5rem' }}>
-                Thank you for reaching out!
-              </h3>
-              <p style={{ color: '#4B5563', maxWidth: '420px', margin: '0 auto 1.5rem auto' }}>
-                Our team will review your inquiry for <strong>{selectedService}</strong> and respond within 24 hours.
-              </p>
-              <button
-                onClick={() => setIsSubmitted(false)}
-                className="wireframe-btn-peach"
-              >
-                Send Another Inquiry
-              </button>
-            </div>
-          ) : (
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
-              
-              {/* Question 1: How can you be part of us? */}
-              <div>
-                <label style={{ display: 'block', fontSize: '1.25rem', fontWeight: 900, color: '#111827', marginBottom: '1rem' }}>
-                  How can you be part of us?
-                </label>
+        {/* OR, LET US CONTACT YOU */}
+        <div style={{ marginBottom: '1.5rem' }}>
+          <h2
+            style={{
+              fontSize: '1.45rem',
+              fontWeight: 800,
+              color: '#4A2511',
+              letterSpacing: '0.01em',
+              textTransform: 'uppercase'
+            }}
+          >
+            OR, LET US CONTACT YOU
+          </h2>
+        </div>
 
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-                  {[
-                    { id: 'project', label: 'I have a project' },
-                    { id: 'referral', label: 'I can refer you to a potential client' },
-                    { id: 'team', label: 'I want to be part of your team' }
-                  ].map((option) => (
+        {isSubmitted ? (
+          <div
+            style={{
+              backgroundColor: '#FCE8E8',
+              borderRadius: '28px',
+              padding: '3rem 2rem',
+              textAlign: 'center'
+            }}
+          >
+            <h3 style={{ fontSize: '1.8rem', fontWeight: 800, color: '#4A2511', marginBottom: '0.75rem' }}>
+              Thank you for reaching out!
+            </h3>
+            <p style={{ color: '#4A2511', marginBottom: '1.5rem' }}>
+              We have received your inquiry for{' '}
+              <strong>
+                {selectedService === 'Choose services*' || selectedService === 'Choose Services'
+                  ? 'General Inquiry'
+                  : selectedService}
+              </strong>{' '}
+              and will contact you shortly.
+            </p>
+            <button onClick={() => setIsSubmitted(false)} className="wireframe-btn-peach">
+              Back to Form
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
+            {/* Question 1: How can you be part of us? */}
+            <div>
+              <div
+                style={{
+                  fontSize: '1.55rem',
+                  fontWeight: 400,
+                  color: '#4A2511',
+                  marginBottom: '1rem'
+                }}
+              >
+                How can you be part of us?
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
+                {[
+                  { id: 'project', label: 'I have a project' },
+                  { id: 'referral', label: 'I can refer you to a potential client' },
+                  { id: 'team', label: 'I want to be part of your team' }
+                ].map((option) => {
+                  const isChecked = inquiryType === option.id;
+                  return (
                     <label
                       key={option.id}
+                      onClick={() => setInquiryType(option.id)}
                       style={{
-                        display: 'flex',
+                        display: 'inline-flex',
                         alignItems: 'center',
                         gap: '12px',
-                        padding: '14px 20px',
-                        backgroundColor: '#FFFFFF',
-                        border: inquiryType === option.id ? '2px solid #FF5E7E' : '1.5px solid #FFD3D9',
-                        borderRadius: '16px',
                         cursor: 'pointer',
-                        fontWeight: 700,
-                        color: inquiryType === option.id ? '#FF4D6D' : '#374151',
-                        transition: 'all 0.15s ease'
+                        fontWeight: 800,
+                        fontSize: '1.1rem',
+                        color: '#4A2511',
+                        fontFamily: 'var(--font-heading)',
+                        userSelect: 'none'
                       }}
                     >
-                      <input
-                        type="radio"
-                        name="inquiryType"
-                        value={option.id}
-                        checked={inquiryType === option.id}
-                        onChange={() => setInquiryType(option.id)}
-                        style={{ width: '18px', height: '18px', accentColor: '#FF4D6D', cursor: 'pointer' }}
-                      />
+                      <span
+                        style={{
+                          width: '18px',
+                          height: '18px',
+                          borderRadius: '50%',
+                          border: '2px solid #991B1B',
+                          display: 'inline-flex',
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                          backgroundColor: '#FFFFFF'
+                        }}
+                      >
+                        {isChecked && (
+                          <span
+                            style={{
+                              width: '10px',
+                              height: '10px',
+                              borderRadius: '50%',
+                              backgroundColor: '#991B1B'
+                            }}
+                          />
+                        )}
+                      </span>
                       <span>{option.label}</span>
                     </label>
-                  ))}
-                </div>
+                  );
+                })}
               </div>
+            </div>
 
-              {/* Question 2: Choose Services */}
-              <div>
-                <label style={{ display: 'block', fontSize: '1.2rem', fontWeight: 900, color: '#111827', marginBottom: '0.75rem' }}>
-                  Choose services*
-                </label>
+            {/* Question 2: Choose services* Dropdown */}
+            <div style={{ position: 'relative', maxWidth: '290px' }}>
+              <button
+                type="button"
+                onClick={() => setDropdownOpen(!dropdownOpen)}
+                style={{
+                  width: '100%',
+                  padding: '10px 14px 10px 22px',
+                  backgroundColor: '#FCE8E8',
+                  border: 'none',
+                  borderRadius: '9999px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  cursor: 'pointer',
+                  fontSize: '1.08rem',
+                  fontWeight: 800,
+                  color: '#4A2511',
+                  fontFamily: 'var(--font-heading)'
+                }}
+              >
+                <span>{selectedService}</span>
+                <span
+                  style={{
+                    width: '32px',
+                    height: '32px',
+                    borderRadius: '50%',
+                    backgroundColor: '#FFC700',
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: '#4A2511',
+                    transition: 'transform 0.2s ease',
+                    transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)'
+                  }}
+                >
+                  <ArrowIcon direction="chevron-down" size={16} strokeWidth={3.4} />
+                </span>
+              </button>
 
-                {/* Custom Interactive Dropdown */}
-                <div style={{ position: 'relative' }}>
-                  <button
-                    type="button"
-                    onClick={() => setDropdownOpen(!dropdownOpen)}
+              {/* Hot-Pink Dropdown Menu matching Page 3 */}
+              {dropdownOpen && (
+                <div
+                  style={{
+                    position: 'absolute',
+                    top: 'calc(100% + 6px)',
+                    left: '14px',
+                    width: '250px',
+                    backgroundColor: '#FF4D6D',
+                    borderRadius: '18px',
+                    boxShadow: '0 14px 30px rgba(255, 77, 109, 0.32)',
+                    zIndex: 60,
+                    padding: '12px 0',
+                    maxHeight: '340px',
+                    overflowY: 'auto'
+                  }}
+                >
+                  {servicesList.map((svc) => {
+                    const isPicked =
+                      selectedService === svc ||
+                      (selectedService === 'Choose services*' && svc === 'Choose Services');
+                    return (
+                      <div
+                        key={svc}
+                        onClick={() => {
+                          setSelectedService(svc === 'Choose Services' ? 'Choose services*' : svc);
+                          setDropdownOpen(false);
+                        }}
+                        style={{
+                          padding: '7px 18px',
+                          color: '#FFFFFF',
+                          fontWeight: 600,
+                          fontSize: '0.92rem',
+                          cursor: 'pointer',
+                          display: 'flex',
+                          alignItems: 'center',
+                          gap: '8px'
+                        }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.12)')}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = 'transparent')}
+                      >
+                        <span style={{ width: '14px', display: 'inline-block', fontWeight: 900 }}>
+                          {isPicked ? '✓' : ''}
+                        </span>
+                        <span>{svc}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Your name* (First & Last Soft-Pink Pill Inputs) */}
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: '1.25rem',
+                  fontWeight: 800,
+                  color: '#4A2511',
+                  marginBottom: '0.5rem',
+                  fontFamily: 'var(--font-heading)'
+                }}
+              >
+                Your name*
+              </label>
+              <div
+                className="responsive-stack"
+                style={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr 1fr',
+                  gap: '2.5rem'
+                }}
+              >
+                <div>
+                  <input
+                    type="text"
+                    required
+                    value={firstName}
+                    onChange={(e) => setFirstName(e.target.value)}
                     style={{
                       width: '100%',
-                      padding: '14px 22px',
-                      backgroundColor: '#FFFFFF',
-                      border: dropdownOpen ? '2px solid #FF5E7E' : '1.5px solid #FFCCD5',
-                      borderRadius: '16px',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                      cursor: 'pointer',
+                      height: '46px',
+                      padding: '0 20px',
+                      borderRadius: '9999px',
+                      border: 'none',
                       fontSize: '1rem',
-                      fontWeight: 700,
-                      color: '#111827',
-                      textAlign: 'left'
+                      backgroundColor: '#FCE8E8',
+                      color: '#4A2511',
+                      outline: 'none'
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: '0.92rem',
+                      color: '#4A2511',
+                      marginTop: '6px',
+                      display: 'block'
                     }}
                   >
-                    <span>{selectedService}</span>
-                    <span
-                      style={{
-                        width: '32px',
-                        height: '32px',
-                        borderRadius: '50%',
-                        backgroundColor: '#FFC000',
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'center',
-                        fontSize: '0.85rem',
-                        fontWeight: 'bold',
-                        color: '#111827',
-                        transition: 'transform 0.2s ease',
-                        transform: dropdownOpen ? 'rotate(180deg)' : 'rotate(0)'
-                      }}
-                    >
-                      ▼
-                    </span>
-                  </button>
+                    First
+                  </span>
+                </div>
 
-                  {/* Dropdown Options List */}
-                  {dropdownOpen && (
-                    <div
-                      style={{
-                        position: 'absolute',
-                        top: '110%',
-                        left: 0,
-                        right: 0,
-                        backgroundColor: '#FF4D6D', // Vibrant hot pink dropdown card as in document
-                        borderRadius: '20px',
-                        boxShadow: '0 12px 28px rgba(255, 77, 109, 0.3)',
-                        zIndex: 50,
-                        overflow: 'hidden',
-                        padding: '8px 0',
-                        maxHeight: '260px',
-                        overflowY: 'auto'
-                      }}
-                    >
-                      {servicesList.map((svc) => (
-                        <div
-                          key={svc}
-                          onClick={() => {
-                            setSelectedService(svc);
-                            setDropdownOpen(false);
-                          }}
-                          style={{
-                            padding: '12px 22px',
-                            color: '#FFFFFF',
-                            fontWeight: 700,
-                            fontSize: '0.95rem',
-                            cursor: 'pointer',
-                            backgroundColor: selectedService === svc ? 'rgba(0,0,0,0.18)' : 'transparent',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'space-between'
-                          }}
-                          onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = 'rgba(0,0,0,0.12)')}
-                          onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = selectedService === svc ? 'rgba(0,0,0,0.18)' : 'transparent')}
-                        >
-                          <span>{svc}</span>
-                          {selectedService === svc && <span>✓</span>}
-                        </div>
-                      ))}
-                    </div>
-                  )}
+                <div>
+                  <input
+                    type="text"
+                    required
+                    value={lastName}
+                    onChange={(e) => setLastName(e.target.value)}
+                    style={{
+                      width: '100%',
+                      height: '46px',
+                      padding: '0 20px',
+                      borderRadius: '9999px',
+                      border: 'none',
+                      fontSize: '1rem',
+                      backgroundColor: '#FCE8E8',
+                      color: '#4A2511',
+                      outline: 'none'
+                    }}
+                  />
+                  <span
+                    style={{
+                      fontSize: '0.92rem',
+                      color: '#4A2511',
+                      marginTop: '6px',
+                      display: 'block'
+                    }}
+                  >
+                    Last
+                  </span>
                 </div>
               </div>
+            </div>
 
-              {/* Name Fields (First & Last) */}
-              <div>
-                <label style={{ display: 'block', fontSize: '1rem', fontWeight: 800, color: '#111827', marginBottom: '0.5rem' }}>
-                  Your name*
-                </label>
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '1rem' }}>
-                  <div>
-                    <input
-                      type="text"
-                      required
-                      placeholder="First name"
-                      value={firstName}
-                      onChange={(e) => setFirstName(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '14px 18px',
-                        borderRadius: '14px',
-                        border: '1.5px solid #FFD3D9',
-                        fontSize: '0.95rem',
-                        backgroundColor: '#FFFFFF',
-                        outline: 'none'
-                      }}
-                      onFocus={(e) => (e.target.style.borderColor = '#FF4D6D')}
-                      onBlur={(e) => (e.target.style.borderColor = '#FFD3D9')}
-                    />
-                    <span style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '4px', display: 'block' }}>First</span>
-                  </div>
-                  <div>
-                    <input
-                      type="text"
-                      required
-                      placeholder="Last name"
-                      value={lastName}
-                      onChange={(e) => setLastName(e.target.value)}
-                      style={{
-                        width: '100%',
-                        padding: '14px 18px',
-                        borderRadius: '14px',
-                        border: '1.5px solid #FFD3D9',
-                        fontSize: '0.95rem',
-                        backgroundColor: '#FFFFFF',
-                        outline: 'none'
-                      }}
-                      onFocus={(e) => (e.target.style.borderColor = '#FF4D6D')}
-                      onBlur={(e) => (e.target.style.borderColor = '#FFD3D9')}
-                    />
-                    <span style={{ fontSize: '0.75rem', color: '#6B7280', marginTop: '4px', display: 'block' }}>Last</span>
-                  </div>
-                </div>
-              </div>
+            {/* Your email* (Full-width Soft-Pink Pill Input) */}
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: '1.25rem',
+                  fontWeight: 800,
+                  color: '#4A2511',
+                  marginBottom: '0.5rem',
+                  fontFamily: 'var(--font-heading)'
+                }}
+              >
+                Your email*
+              </label>
+              <input
+                type="email"
+                required
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                style={{
+                  width: '100%',
+                  height: '46px',
+                  padding: '0 22px',
+                  borderRadius: '9999px',
+                  border: 'none',
+                  fontSize: '1rem',
+                  backgroundColor: '#FCE8E8',
+                  color: '#4A2511',
+                  outline: 'none'
+                }}
+              />
+            </div>
 
-              {/* Email Field */}
-              <div>
-                <label style={{ display: 'block', fontSize: '1rem', fontWeight: 800, color: '#111827', marginBottom: '0.5rem' }}>
-                  Your email*
-                </label>
-                <input
-                  type="email"
-                  required
-                  placeholder="name@company.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '14px 18px',
-                    borderRadius: '14px',
-                    border: '1.5px solid #FFD3D9',
-                    fontSize: '0.95rem',
-                    backgroundColor: '#FFFFFF',
-                    outline: 'none'
-                  }}
-                  onFocus={(e) => (e.target.style.borderColor = '#FF4D6D')}
-                  onBlur={(e) => (e.target.style.borderColor = '#FFD3D9')}
-                />
-              </div>
+            {/* Message (optional) (Large Soft-Pink Rounded Box) */}
+            <div>
+              <label
+                style={{
+                  display: 'block',
+                  fontSize: '1.25rem',
+                  fontWeight: 800,
+                  color: '#4A2511',
+                  marginBottom: '0.5rem',
+                  fontFamily: 'var(--font-heading)'
+                }}
+              >
+                Message <span style={{ fontWeight: 400 }}>(optional)</span>
+              </label>
+              <textarea
+                rows="6"
+                value={message}
+                onChange={(e) => setMessage(e.target.value)}
+                style={{
+                  width: '100%',
+                  minHeight: '210px',
+                  padding: '18px 22px',
+                  borderRadius: '26px',
+                  border: 'none',
+                  fontSize: '1rem',
+                  backgroundColor: '#FCE8E8',
+                  color: '#4A2511',
+                  outline: 'none',
+                  resize: 'vertical'
+                }}
+              />
+            </div>
 
-              {/* Message Field */}
-              <div>
-                <label style={{ display: 'block', fontSize: '1rem', fontWeight: 800, color: '#111827', marginBottom: '0.5rem' }}>
-                  Message (optional)
-                </label>
-                <textarea
-                  rows="4"
-                  placeholder="Tell us about your project, timeline, and goals..."
-                  value={message}
-                  onChange={(e) => setMessage(e.target.value)}
-                  style={{
-                    width: '100%',
-                    padding: '14px 18px',
-                    borderRadius: '14px',
-                    border: '1.5px solid #FFD3D9',
-                    fontSize: '0.95rem',
-                    backgroundColor: '#FFFFFF',
-                    outline: 'none',
-                    resize: 'vertical'
-                  }}
-                  onFocus={(e) => (e.target.style.borderColor = '#FF4D6D')}
-                  onBlur={(e) => (e.target.style.borderColor = '#FFD3D9')}
-                />
-              </div>
-
-              {/* Submit Button */}
-              <div style={{ textAlign: 'right' }}>
-                <button
-                  type="submit"
-                  className="wireframe-btn-peach"
-                  style={{ fontSize: '1.15rem', padding: '14px 40px' }}
-                >
-                  Send
-                </button>
-              </div>
-
-            </form>
-          )}
-        </div>
+            {/* Bottom-Right Yellow Pill "Send" Button */}
+            <div style={{ textAlign: 'right' }}>
+              <button
+                type="submit"
+                className="wireframe-btn-peach"
+                style={{ fontSize: '1.25rem', padding: '10px 36px' }}
+              >
+                Send
+              </button>
+            </div>
+          </form>
+        )}
       </div>
     </div>
   );

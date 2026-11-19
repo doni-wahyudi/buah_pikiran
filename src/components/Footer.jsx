@@ -1,5 +1,6 @@
 import React from 'react';
 import MascotIcon from './MascotIcon';
+import ArrowIcon from './ArrowIcon';
 
 export default function Footer({ onNavigate }) {
   const scrollToTop = () => {
@@ -7,147 +8,210 @@ export default function Footer({ onNavigate }) {
   };
 
   return (
-    <footer style={{ marginTop: '5rem', backgroundColor: '#FAFAFA' }}>
-      {/* Top Banner Prompt */}
-      <div className="container-custom" style={{ paddingBottom: '2.5rem' }}>
+    <footer style={{ marginTop: '4rem', backgroundColor: '#FAF6F0', color: '#4A2511' }}>
+      <div className="container-custom" style={{ padding: 0, maxWidth: '100%' }}>
         <div
+          className="responsive-stack"
           style={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            flexWrap: 'wrap',
-            gap: '1.5rem',
-            padding: '2rem 2.5rem',
-            backgroundColor: '#FFFFFF',
-            border: '1.5px dashed #D1D5DB',
-            borderRadius: '20px'
+            display: 'grid',
+            gridTemplateColumns: '1.05fr 1fr 1.05fr',
+            minHeight: '210px'
           }}
         >
-          <div>
-            <div style={{ fontSize: '1rem', fontWeight: 700, color: '#4B5563', marginBottom: '4px' }}>
-              Drop us hello at:
-            </div>
-            <a
-              href="mailto:hello@buahpikiran.id"
-              style={{
-                fontSize: '1.8rem',
-                fontWeight: 900,
-                color: '#111827',
-                textDecoration: 'none',
-                letterSpacing: '-0.02em',
-                transition: 'color 0.15s ease'
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = '#FF4D6D')}
-              onMouseLeave={(e) => (e.currentTarget.style.color = '#111827')}
-            >
-              hello@buahpikiran.id
-            </a>
-          </div>
-
-          <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
-            <MascotIcon type="hero" size={72} />
-          </div>
-        </div>
-      </div>
-
-      {/* Main Yellow Agency Card */}
-      <div style={{ backgroundColor: '#FFC800', padding: '3.5rem 0 2.5rem 0', color: '#1F2937' }}>
-        <div className="container-custom">
+          {/* COLUMN 1 (Left): Drop us hello at + Standing Peach Mascot */}
           <div
             style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-              gap: '2.5rem',
-              alignItems: 'start'
+              backgroundColor: '#FAF6F0',
+              padding: '2.25rem 2.5rem',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: '1rem'
             }}
           >
-            {/* Column 1: Info & Address */}
             <div>
-              <div style={{ fontSize: '1.25rem', fontWeight: 900, marginBottom: '0.75rem', letterSpacing: '-0.02em' }}>
-                buahpikiran.id
+              <div style={{ fontSize: '0.95rem', fontWeight: 500, color: '#4A2511', marginBottom: '2px' }}>
+                Drop us hello at:
               </div>
-              <p style={{ fontSize: '0.88rem', lineHeight: 1.6, fontWeight: 500, color: '#27272A', maxWidth: '320px', marginBottom: '1.25rem' }}>
-                Menara Sentraya Lt-10 Unit A6<br />
-                Jl. Iskandarsyah Raya No. 1A Melawai,<br />
-                Kebayoran Baru, Jakarta Selatan
-              </p>
-
-              {/* Social links */}
-              <div style={{ display: 'flex', gap: '10px' }}>
-                {['Instagram (IG)', 'LinkedIn (In)', 'TikTok (TT)'].map((social, i) => (
-                  <span
-                    key={i}
-                    style={{
-                      padding: '6px 12px',
-                      backgroundColor: 'rgba(255, 255, 255, 0.45)',
-                      borderRadius: '8px',
-                      fontSize: '0.75rem',
-                      fontWeight: 700,
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {social}
-                  </span>
-                ))}
-              </div>
+              <a
+                href="mailto:hello@buahpikiran.id"
+                style={{
+                  fontSize: '1.15rem',
+                  fontWeight: 800,
+                  color: '#4A2511',
+                  textDecoration: 'none',
+                  fontFamily: 'var(--font-heading)'
+                }}
+              >
+                hello@buahpikiran.id
+              </a>
             </div>
 
-            {/* Column 2: Sitemap & Back to Top */}
-            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'space-between', height: '100%' }}>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '1.5rem' }}>
-                {[
-                  { id: 'home', label: 'HOMEPAGE' },
-                  { id: 'about', label: 'ABOUT' },
-                  { id: 'works', label: 'OUR WORKS' },
-                  { id: 'contact', label: 'CONTACT' }
-                ].map((link) => (
-                  <button
-                    key={link.id}
-                    onClick={() => onNavigate(link.id)}
-                    style={{
-                      background: 'none',
-                      border: 'none',
-                      padding: 0,
-                      textAlign: 'left',
-                      fontWeight: 800,
-                      fontSize: '0.85rem',
-                      letterSpacing: '0.05em',
-                      color: '#18181B',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    {link.label}
-                  </button>
-                ))}
-              </div>
+            <div style={{ flexShrink: 0 }}>
+              <MascotIcon type="footer" size={88} />
+            </div>
+          </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%', marginTop: 'auto', paddingTop: '1rem', borderTop: '1px solid rgba(0,0,0,0.1)' }}>
-                <div style={{ fontSize: '0.8rem', fontWeight: 600, color: '#3F3F46' }}>
-                  (c) 2026 Buah Pikiran. All rights reserved.
-                </div>
+          {/* COLUMN 2 (Center): Yellow Block with Address & Outlined Social SVG Icons */}
+          <div
+            style={{
+              backgroundColor: '#FFC700',
+              padding: '2.25rem 2.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center'
+            }}
+          >
+            <div
+              style={{
+                fontSize: '0.95rem',
+                fontWeight: 800,
+                color: '#4A2511',
+                marginBottom: '0.5rem',
+                fontFamily: 'var(--font-heading)'
+              }}
+            >
+              buahpikiran.id
+            </div>
 
+            <p
+              style={{
+                fontSize: '0.78rem',
+                lineHeight: 1.45,
+                fontWeight: 500,
+                color: '#4A2511',
+                marginBottom: '1.1rem'
+              }}
+            >
+              Menara Sentraya Lt-10 Unit A6<br />
+              Jl. Iskandarsyah Raya No. 1A Melawai,<br />
+              Kebayoran Baru, Jakarta Selatan
+            </p>
+
+            {/* 3 Outlined Rounded-Square Social Icons: Instagram, LinkedIn, TikTok */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              {/* Instagram */}
+              <a
+                href="#instagram"
+                onClick={(e) => e.preventDefault()}
+                aria-label="Instagram"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '7px',
+                  border: '1.8px solid #4A2511',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#4A2511',
+                  textDecoration: 'none'
+                }}
+              >
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="2" width="20" height="20" rx="5" ry="5" />
+                  <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z" />
+                  <line x1="17.5" y1="6.5" x2="17.51" y2="6.5" />
+                </svg>
+              </a>
+
+              {/* LinkedIn */}
+              <a
+                href="#linkedin"
+                onClick={(e) => e.preventDefault()}
+                aria-label="LinkedIn"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '7px',
+                  border: '1.8px solid #4A2511',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#4A2511',
+                  textDecoration: 'none',
+                  fontWeight: 800,
+                  fontSize: '0.82rem',
+                  fontFamily: 'var(--font-sans)'
+                }}
+              >
+                in
+              </a>
+
+              {/* TikTok */}
+              <a
+                href="#tiktok"
+                onClick={(e) => e.preventDefault()}
+                aria-label="TikTok"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  borderRadius: '7px',
+                  border: '1.8px solid #4A2511',
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: '#4A2511',
+                  textDecoration: 'none'
+                }}
+              >
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 12a4 4 0 1 0 4 4V4a5 5 0 0 0 5 5" />
+                </svg>
+              </a>
+            </div>
+          </div>
+
+          {/* COLUMN 3 (Right): Sitemap Links, Copyright & Yellow Up Arrow Button */}
+          <div
+            style={{
+              backgroundColor: '#FAF6F0',
+              padding: '2.25rem 2.5rem',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              position: 'relative'
+            }}
+          >
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+              {[
+                { id: 'home', label: 'HOMEPAGE' },
+                { id: 'about', label: 'ABOUT' },
+                { id: 'works', label: 'OUR WORKS' },
+                { id: 'contact', label: 'CONTACT' }
+              ].map((link) => (
                 <button
-                  onClick={scrollToTop}
-                  title="Scroll to top"
+                  key={link.id}
+                  onClick={() => onNavigate(link.id)}
                   style={{
-                    width: '42px',
-                    height: '42px',
-                    borderRadius: '50%',
-                    backgroundColor: '#18181B',
-                    color: '#FFFFFF',
+                    background: 'none',
                     border: 'none',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    cursor: 'pointer',
-                    fontSize: '1.2rem',
-                    fontWeight: 'bold',
-                    boxShadow: '0 4px 10px rgba(0,0,0,0.15)'
+                    padding: 0,
+                    textAlign: 'left',
+                    fontWeight: 600,
+                    fontSize: '0.76rem',
+                    letterSpacing: '0.03em',
+                    color: '#4A2511',
+                    cursor: 'pointer'
                   }}
                 >
-                  ↑
+                  {link.label}
                 </button>
+              ))}
+            </div>
+
+            <div style={{ display: 'flex', alignItems: 'flex-end', justifyContent: 'space-between', marginTop: '1.25rem' }}>
+              <div style={{ fontSize: '0.72rem', fontWeight: 500, color: '#4A2511' }}>
+                (c) 2026 Buah Pikiran. All rights reserved.
               </div>
+
+              <button
+                onClick={scrollToTop}
+                title="Scroll to top"
+                aria-label="Scroll to top"
+                className="arrow-circle-btn arrow-circle-btn-up"
+              >
+                <ArrowIcon direction="up" size={20} strokeWidth={3.4} />
+              </button>
             </div>
           </div>
         </div>

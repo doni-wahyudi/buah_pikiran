@@ -1,4 +1,5 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import ArrowIcon from './ArrowIcon';
 
 const SERVICES = [
   '360° Campaign',
@@ -11,56 +12,96 @@ const SERVICES = [
 ];
 
 const N = SERVICES.length;
-const BASE = 7000; // Large integer base for infinite forward/backward scroll
-const ITEM_HEIGHT = 44;
+const BASE = 7000; // Large multiple of 7 for seamless infinite scrolling
+const ITEM_HEIGHT = 40;
 const GAP = 10;
-const STEP = ITEM_HEIGHT + GAP; // 54px
-const CONTAINER_HEIGHT = 162;
-const CENTER_OFFSET = (CONTAINER_HEIGHT - ITEM_HEIGHT) / 2; // 59px
+const STEP = ITEM_HEIGHT + GAP; // 50px
+// Window height = 300px so 5 items are fully visible and the 2 outer items (-3, +3) are partially clipped at top/bottom edge just like Page 1 of the PDF!
+const CONTAINER_HEIGHT = 300;
+const CENTER_OFFSET = (CONTAINER_HEIGHT - ITEM_HEIGHT) / 2; // 130px
 
 export default function VerticalServicePicker({ selectedService, onSelectService, onNext }) {
   const initIdx = SERVICES.indexOf(selectedService) !== -1 ? SERVICES.indexOf(selectedService) : 3;
   const [currAbsIdx, setCurrAbsIdx] = useState(BASE + initIdx);
-  const isAnimating = useRef(false);
+  const wheelBoxRef = useRef(null);
+  const wheelLockRef = useRef(false);
+  const touchStartYRef = useRef(null);
 
   const scrollBy = (delta) => {
-    const nextAbs = currAbsIdx + delta;
-    setCurrAbsIdx(nextAbs);
-    const resolvedService = SERVICES[((nextAbs % N) + N) % N];
-    onSelectService(resolvedService);
+    setCurrAbsIdx((prev) => {
+      const nextAbs = prev + delta;
+      const resolvedService = SERVICES[((nextAbs % N) + N) % N];
+      onSelectService(resolvedService);
+      return nextAbs;
+    });
   };
 
-  const goUp = () => scrollBy(-1);
-  const goDown = () => scrollBy(1);
+  // Native wheel event listener with passive: false so scrolling inside the drum picker rolls items cleanly
+  useEffect(() => {
+    const el = wheelBoxRef.current;
+    if (!el) return;
 
-  // Render 5 items around currAbsIdx: [-2, -1, 0, 1, 2]
-  // [-1, 0, 1] are visible inside the 162px container; [-2, 2] smoothly slide in/out
-  const visibleIndices = [-2, -1, 0, 1, 2].map(offset => currAbsIdx + offset);
+    const handleWheel = (e) => {
+      e.preventDefault();
+      if (wheelLockRef.current) return;
+      if (Math.abs(e.deltaY) < 6) return;
+
+      wheelLockRef.current = true;
+      scrollBy(e.deltaY > 0 ? 1 : -1);
+      setTimeout(() => {
+        wheelLockRef.current = false;
+      }, 160);
+    };
+
+    el.addEventListener('wheel', handleWheel, { passive: false });
+    return () => el.removeEventListener('wheel', handleWheel);
+  }, []);
+
+  const handleTouchStart = (e) => {
+    if (e.touches && e.touches.length > 0) {
+      touchStartYRef.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchMove = (e) => {
+    if (touchStartYRef.current === null || !e.touches || e.touches.length === 0) return;
+    const diff = touchStartYRef.current - e.touches[0].clientY;
+    if (Math.abs(diff) > 26) {
+      scrollBy(diff > 0 ? 1 : -1);
+      touchStartYRef.current = e.touches[0].clientY;
+    }
+  };
+
+  const handleTouchEnd = () => {
+    touchStartYRef.current = null;
+  };
+
+  // Render 9 items around currAbsIdx: [-4..+4], where [-3..+3] appear inside the 300px window
+  const visibleIndices = [-4, -3, -2, -1, 0, 1, 2, 3, 4].map((offset) => currAbsIdx + offset);
   const translateY = CENTER_OFFSET - currAbsIdx * STEP;
 
   return (
     <div
       style={{
-        display: 'flex',
+        display: 'grid',
+        gridTemplateColumns: '1fr auto 1fr',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        flexWrap: 'wrap',
         gap: '1.5rem',
-        padding: '1.5rem 2.5rem',
-        backgroundColor: '#FFF0F2',
+        padding: '0 3.5rem',
+        backgroundColor: '#FCE8E8',
         borderRadius: '28px',
-        border: '2px dashed #FFB8C2',
         position: 'relative',
-        minHeight: '180px'
+        height: `${CONTAINER_HEIGHT}px`,
+        overflow: 'hidden'
       }}
     >
       {/* Left: "I need" */}
-      <div style={{ flex: '0 0 auto' }}>
+      <div style={{ justifySelf: 'start' }}>
         <h3
           style={{
-            fontSize: '2.4rem',
+            fontSize: 'clamp(1.85rem, 3.5vw, 2.65rem)',
             fontWeight: 800,
-            color: '#111827',
+            color: '#4A2511',
             letterSpacing: '-0.02em',
             margin: 0,
             fontFamily: 'var(--font-heading)'
@@ -70,194 +111,105 @@ export default function VerticalServicePicker({ selectedService, onSelectService
         </h3>
       </div>
 
-      {/* Center: 3-Item Drum Picker with Rolling Scroll Animation */}
+      {/* Center: Scrollable Drum Picker (Scroll interaction strictly limited to this center column) */}
       <div
+        ref={wheelBoxRef}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        title="Scroll or click to pick a service"
         style={{
-          flex: '1 1 320px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          position: 'relative'
+          width: '300px',
+          height: `${CONTAINER_HEIGHT}px`,
+          position: 'relative',
+          overflow: 'hidden',
+          cursor: 'ns-resize',
+          touchAction: 'none'
         }}
       >
-        {/* Top Scroll Indicator Arrow */}
-        <button
-          onClick={goUp}
-          aria-label="Previous service"
-          style={{
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: '2px 12px',
-            color: '#FF5E7E',
-            fontSize: '0.9rem',
-            fontWeight: 900,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'transform 0.15s ease',
-            userSelect: 'none',
-            zIndex: 10
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(-2px)')}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-        >
-          ▲
-        </button>
-
-        {/* 3-Item Window Container */}
         <div
           style={{
-            width: '100%',
-            maxWidth: '280px',
-            height: `${CONTAINER_HEIGHT}px`,
-            position: 'relative',
-            overflow: 'hidden',
-            borderRadius: '16px'
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            transform: `translateY(${translateY}px)`,
+            transition: 'transform 0.32s cubic-bezier(0.22, 1, 0.36, 1)',
+            willChange: 'transform'
           }}
         >
-          {/* Top subtle fade gradient */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              height: '16px',
-              background: 'linear-gradient(to bottom, #FFF0F2, rgba(255, 240, 242, 0))',
-              zIndex: 6,
-              pointerEvents: 'none'
-            }}
-          />
+          {visibleIndices.map((absIdx) => {
+            const service = SERVICES[((absIdx % N) + N) % N];
+            const offset = absIdx - currAbsIdx;
+            const isCenter = offset === 0;
+            const topPx = absIdx * STEP;
 
-          {/* Animated Rolling Track */}
-          <div
-            style={{
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              transform: `translateY(${translateY}px)`,
-              transition: 'transform 0.35s cubic-bezier(0.25, 1, 0.5, 1)',
-              willChange: 'transform'
-            }}
-          >
-            {visibleIndices.map(absIdx => {
-              const service = SERVICES[((absIdx % N) + N) % N];
-              const isCenter = absIdx === currAbsIdx;
-              const isAdjacent = Math.abs(absIdx - currAbsIdx) === 1;
-              const isAbove = absIdx === currAbsIdx - 1;
-              const isBelow = absIdx === currAbsIdx + 1;
-              const topPx = absIdx * STEP;
-
-              return (
-                <div
-                  key={absIdx}
-                  onClick={isAbove ? goUp : isBelow ? goDown : undefined}
-                  style={{
-                    position: 'absolute',
-                    top: `${topPx}px`,
-                    left: '50%',
-                    transform: `translateX(-50%) scale(${isCenter ? 1 : 0.94})`,
-                    width: '240px',
-                    height: `${ITEM_HEIGHT}px`,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center',
-                    padding: '0 20px',
-                    borderRadius: '9999px',
-                    border: isCenter ? '2px solid #EAB308' : '1.5px solid #E5E7EB',
-                    backgroundColor: isCenter ? '#FFC000' : '#FFFFFF',
-                    color: isCenter ? '#111827' : '#4B5563',
-                    fontWeight: isCenter ? 800 : 600,
-                    fontSize: isCenter ? '1.05rem' : '0.92rem',
-                    fontFamily: 'var(--font-heading)',
-                    boxShadow: isCenter
-                      ? '0 6px 18px rgba(255, 192, 0, 0.45)'
-                      : '0 2px 6px rgba(0, 0, 0, 0.04)',
-                    opacity: isCenter ? 1 : isAdjacent ? 0.72 : 0,
-                    cursor: isCenter ? 'default' : 'pointer',
-                    userSelect: 'none',
-                    whiteSpace: 'nowrap',
-                    transition: 'all 0.3s ease',
-                    zIndex: isCenter ? 5 : 2
-                  }}
-                  onMouseEnter={(e) => {
-                    if (!isCenter) {
-                      e.currentTarget.style.opacity = '1';
-                      e.currentTarget.style.borderColor = '#FF5E7E';
-                      e.currentTarget.style.color = '#111827';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (!isCenter) {
-                      e.currentTarget.style.opacity = '0.72';
-                      e.currentTarget.style.borderColor = '#E5E7EB';
-                      e.currentTarget.style.color = '#4B5563';
-                    }
-                  }}
-                >
-                  {service}
-                </div>
-              );
-            })}
-          </div>
-
-          {/* Bottom subtle fade gradient */}
-          <div
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              right: 0,
-              height: '16px',
-              background: 'linear-gradient(to top, #FFF0F2, rgba(255, 240, 242, 0))',
-              zIndex: 6,
-              pointerEvents: 'none'
-            }}
-          />
+            return (
+              <div
+                key={absIdx}
+                onClick={() => {
+                  if (offset !== 0) scrollBy(offset);
+                }}
+                style={{
+                  position: 'absolute',
+                  top: `${topPx}px`,
+                  left: '50%',
+                  transform: 'translateX(-50%)',
+                  width: 'fit-content',
+                  height: `${ITEM_HEIGHT}px`,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  padding: '0 22px',
+                  borderRadius: '9999px',
+                  backgroundColor: isCenter ? '#FFC700' : '#F8C2C8',
+                  color: '#4A2511',
+                  fontWeight: 800,
+                  fontSize: '1.08rem',
+                  fontFamily: 'var(--font-heading)',
+                  cursor: isCenter ? 'default' : 'pointer',
+                  userSelect: 'none',
+                  whiteSpace: 'nowrap',
+                  transition: 'background-color 0.25s ease, transform 0.25s ease',
+                  zIndex: isCenter ? 5 : 2
+                }}
+              >
+                {service}
+              </div>
+            );
+          })}
         </div>
+      </div>
 
-        {/* Bottom Scroll Indicator Arrow */}
+      {/* Right: "Next" + Yellow Circle Arrow Button */}
+      <div style={{ justifySelf: 'end' }}>
         <button
-          onClick={goDown}
-          aria-label="Next service"
+          type="button"
+          onClick={onNext}
           style={{
             background: 'none',
             border: 'none',
-            cursor: 'pointer',
-            padding: '2px 12px',
-            color: '#FF5E7E',
-            fontSize: '0.9rem',
-            fontWeight: 900,
-            display: 'flex',
+            display: 'inline-flex',
             alignItems: 'center',
-            justifyContent: 'center',
-            transition: 'transform 0.15s ease',
-            userSelect: 'none',
-            zIndex: 10
-          }}
-          onMouseEnter={(e) => (e.currentTarget.style.transform = 'translateY(2px)')}
-          onMouseLeave={(e) => (e.currentTarget.style.transform = 'translateY(0)')}
-        >
-          ▼
-        </button>
-      </div>
-
-      {/* Right: "Next →" Button */}
-      <div style={{ flex: '0 0 auto' }}>
-        <button
-          onClick={onNext}
-          className="wireframe-btn-peach"
-          style={{
-            fontSize: '1.2rem',
-            fontWeight: 800,
-            padding: '14px 34px',
-            boxShadow: '0 6px 18px rgba(255, 192, 0, 0.4)'
+            gap: '14px',
+            cursor: 'pointer',
+            padding: '8px 0'
           }}
         >
-          <span>Next</span>
-          <span style={{ fontSize: '1.35rem', fontWeight: 900 }}>→</span>
+          <span
+            style={{
+              fontSize: 'clamp(1.85rem, 3.5vw, 2.65rem)',
+              fontWeight: 800,
+              color: '#4A2511',
+              letterSpacing: '-0.02em',
+              fontFamily: 'var(--font-heading)'
+            }}
+          >
+            Next
+          </span>
+          <span className="arrow-circle-btn arrow-circle-btn-right">
+            <ArrowIcon direction="right" size={20} strokeWidth={3.4} />
+          </span>
         </button>
       </div>
     </div>

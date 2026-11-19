@@ -3,18 +3,14 @@
 :root {
   --font-heading: 'Bricolage Grotesque', system-ui, -apple-system, sans-serif;
   --font-sans: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
-  --primary-pink: #FF6B6B;
-  --primary-peach: #FFA07A;
-  --accent-peach-light: #FFF0ED;
-  --accent-peach-subtle: #FFF8F6;
-  --bg-wireframe: #FAFAFB;
-  --wireframe-border: #E5E7EB;
-  --wireframe-border-dark: #9CA3AF;
-  --wireframe-box: #F3F4F6;
-  --wireframe-pink: #FF4D6D;
-  --text-primary: #111827;
-  --text-secondary: #4B5563;
-  --text-muted: #6B7280;
+  --text-brown: #4A2511;
+  --text-brown-muted: #6E4730;
+  --primary-pink: #FF5370;
+  --soft-pink-bg: #FCE8E8;
+  --soft-pink-pill: #F8C2C8;
+  --navbar-pink: #F8BFC7;
+  --yellow-accent: #FFC700;
+  --cream-footer: #FAF6F0;
 }
 
 * {
@@ -25,14 +21,13 @@
 
 body {
   font-family: var(--font-sans);
-  background-color: var(--bg-wireframe);
-  color: var(--text-primary);
+  background-color: #FFFFFF;
+  color: var(--text-brown);
   line-height: 1.5;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 }
 
-/* Headings use the display font */
 h1,
 h2,
 h3,
@@ -40,7 +35,8 @@ h4,
 h5,
 h6 {
   font-family: var(--font-heading);
-  letter-spacing: -0.01em;
+  color: var(--text-brown);
+  letter-spacing: -0.02em;
   line-height: 1.15;
 }
 
@@ -51,21 +47,6 @@ h6 {
   margin-right: auto;
   padding-left: 1.5rem;
   padding-right: 1.5rem;
-}
-
-/* Wireframe Aesthetic Utilities */
-.wireframe-box {
-  background: #F3F4F6;
-  border: 1.5px dashed #D1D5DB;
-  position: relative;
-  overflow: hidden;
-}
-
-.wireframe-pink-box {
-  background: #FF5E7E;
-  border-radius: 12px;
-  position: relative;
-  overflow: hidden;
 }
 
 /* Marquee Animation (Referencing madebyhart.com) */
@@ -83,16 +64,15 @@ h6 {
   display: flex;
   overflow: hidden;
   user-select: none;
-  gap: 2rem;
   width: 100%;
 }
 
 .marquee-track {
   display: flex;
   flex-shrink: 0;
-  gap: 3rem;
+  gap: 4rem;
   min-width: 100%;
-  animation: marquee 24s linear infinite;
+  animation: marquee 26s linear infinite;
   align-items: center;
 }
 
@@ -104,8 +84,8 @@ h6 {
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background-color: rgba(17, 24, 39, 0.55);
-  backdrop-filter: blur(5px);
+  background-color: rgba(74, 37, 17, 0.45);
+  backdrop-filter: blur(4px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -113,103 +93,247 @@ h6 {
   padding: 1.25rem;
 }
 
-/* Button Styles */
+/* Yellow Pill Button */
 .wireframe-btn-peach {
-  background-color: #FFC000;
-  color: #111827;
+  background-color: #FFC700;
+  color: #4A2511;
   font-family: var(--font-heading);
-  font-weight: 700;
-  padding: 12px 28px;
+  font-weight: 800;
+  padding: 10px 28px;
   border-radius: 9999px;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 8px;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 10px rgba(255, 192, 0, 0.3);
 }
 
 .wireframe-btn-peach:hover {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(255, 192, 0, 0.45);
+  background-color: #FFD026;
+  box-shadow: 0 6px 14px rgba(255, 199, 0, 0.35);
 }
 
-.wireframe-btn-pink {
-  background-color: #FF4D6D;
-  color: #FFFFFF;
-  font-family: var(--font-heading);
-  font-weight: 700;
-  padding: 12px 28px;
-  border-radius: 9999px;
+/* Circular Arrow Navigation Buttons */
+.arrow-circle-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background-color: #FFC700;
+  color: #4A2511;
   border: none;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
-  gap: 8px;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 10px rgba(255, 77, 109, 0.25);
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(255, 199, 0, 0.35);
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background-color 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
-.wireframe-btn-pink:hover {
-  background-color: #E63956;
+.arrow-circle-btn:hover {
+  background-color: #FFD026;
+  transform: translateY(-2px) scale(1.06);
+  box-shadow: 0 7px 16px rgba(255, 199, 0, 0.48);
+}
+
+.arrow-circle-btn:active {
+  transform: scale(0.95);
+}
+
+.arrow-circle-btn-left:hover svg {
+  transform: translateX(-2px);
+}
+
+.arrow-circle-btn-right:hover svg {
+  transform: translateX(2px);
+}
+
+.arrow-circle-btn-up:hover svg {
   transform: translateY(-2px);
-  box-shadow: 0 6px 14px rgba(255, 77, 109, 0.35);
 }
 
-/* Founder Card Hover Reveal Styles */
-.founder-card {
-  background-color: #FFFFFF;
-  border: 1.5px solid #E5E7EB;
-  border-radius: 20px;
-  padding: 2rem 1.5rem;
+/* Founder Hover Expertise Reveal */
+.founder-col {
   text-align: center;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.founder-avatar-trigger {
+  cursor: pointer;
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.founder-col:hover .founder-avatar-trigger {
+  transform: scale(1.06);
+}
+
+.founder-expertise-box {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transform: translateY(-8px);
+  transition: opacity 0.35s ease, max-height 0.4s ease, transform 0.35s ease, margin-top 0.35s ease;
+  margin-top: 0;
+  width: 100%;
+}
+
+.founder-col:hover .founder-expertise-box,
+.founder-col.is-open .founder-expertise-box {
+  opacity: 1;
+  max-height: 320px;
+  transform: translateY(0);
+  margin-top: 1.1rem;
+}
+
+/* Flip Book 3D Realistic Page-Turn Styles */
+.flipbook-stage {
+  perspective: 2200px;
+  max-width: 880px;
+  margin: 0 auto;
+  position: relative;
+  padding-bottom: 6px;
+}
+
+/* Layered Paper Page Edges Underneath Book */
+.flipbook-paper-stack-left,
+.flipbook-paper-stack-right {
+  position: absolute;
+  top: 6px;
+  bottom: 0;
+  width: calc(50% - 4px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.flipbook-paper-stack-left {
+  left: -4px;
+  background-color: #F6C2C8;
+  border: 1.5px solid #ECA7B2;
+  border-radius: 24px 0 0 24px;
+  box-shadow: -3px 3px 0 #F9D8DC, -4px 4px 12px rgba(74, 37, 17, 0.08);
+}
+
+.flipbook-paper-stack-right {
+  right: -4px;
+  background-color: #E84360;
+  border: 1.5px solid #DF3A57;
+  border-radius: 0 24px 24px 0;
+  box-shadow: 3px 3px 0 #F57B91, 4px 4px 12px rgba(74, 37, 17, 0.1);
+}
+
+.flipbook-spread {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 360px;
+  position: relative;
+  transform-style: preserve-3d;
+  border-radius: 26px;
+  z-index: 2;
+}
+
+.flipbook-page-left {
+  background-color: #FAD4D8;
+  border: 2px solid #F3B6C0;
+  border-right: none;
+  border-radius: 24px 0 0 24px;
+  padding: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #4A2511;
   position: relative;
   overflow: hidden;
 }
 
-.founder-card:hover {
-  border-color: #FF5E7E;
-  transform: translateY(-4px);
-  box-shadow: 0 16px 30px -10px rgba(255, 94, 126, 0.15);
-}
-
-.founder-avatar-wrap {
-  width: 120px;
-  height: 120px;
-  margin: 0 auto 1.25rem auto;
-  border-radius: 50%;
-  background-color: #F9FAFB;
-  border: 2px dashed #CBD5E1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 3rem;
-  transition: transform 0.3s ease;
-}
-
-.founder-card:hover .founder-avatar-wrap {
-  transform: scale(1.08);
-  border-color: #FF5E7E;
-}
-
-/* Drawer that smoothly opens upon hover */
-.founder-expertise-drawer {
-  max-height: 0;
-  opacity: 0;
+.flipbook-page-right {
+  background-color: #FF5370;
+  border: 2px solid #F3B6C0;
+  border-left: none;
+  border-radius: 0 24px 24px 0;
+  position: relative;
   overflow: hidden;
-  transition: max-height 0.4s ease, opacity 0.3s ease, margin-top 0.3s ease;
-  margin-top: 0;
 }
 
-.founder-card:hover .founder-expertise-drawer {
-  max-height: 240px;
-  opacity: 1;
-  margin-top: 1.25rem;
+/* Realistic Curved Paper Gutter Shading near Center Binding */
+.flipbook-gutter-left {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.1) 0%,
+    rgba(255, 255, 255, 0) 76%,
+    rgba(74, 37, 17, 0.05) 92%,
+    rgba(74, 37, 17, 0.16) 100%
+  );
 }
 
-/* Flip book testimonial effect */
-.testimonial-flip-card {
-  transition: opacity 0.3s ease, transform 0.3s ease;
+.flipbook-gutter-right {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  background: linear-gradient(
+    90deg,
+    rgba(74, 37, 17, 0.22) 0%,
+    rgba(74, 37, 17, 0.07) 8%,
+    rgba(255, 255, 255, 0.1) 24%,
+    rgba(255, 255, 255, 0) 100%
+  );
+}
+
+/* Center Book Spine Binding Crease */
+.flipbook-spine {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 50%;
+  width: 3px;
+  transform: translateX(-50%);
+  background: linear-gradient(
+    90deg,
+    rgba(74, 37, 17, 0.22) 0%,
+    rgba(255, 255, 255, 0.22) 50%,
+    rgba(74, 37, 17, 0.24) 100%
+  );
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* 3D Turning Page Leaf */
+.flipbook-leaf {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 50%;
+  transform-style: preserve-3d;
+  z-index: 30;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.flipbook-leaf-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  overflow: hidden;
+}
+
+.flipbook-leaf-back {
+  transform: rotateY(180deg);
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+  .responsive-stack {
+    grid-template-columns: 1fr !important;
+  }
 }

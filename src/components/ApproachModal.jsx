@@ -1,102 +1,94 @@
 import React from 'react';
-import WireframePlaceholder from './WireframePlaceholder';
 
 export default function ApproachModal({ approach, onClose }) {
   if (!approach) return null;
-
-  const isSprint = approach === 'Sprint';
 
   return (
     <div className="modal-overlay" onClick={onClose}>
       <div
         style={{
-          backgroundColor: '#FFFFFF',
-          borderRadius: '20px',
-          maxWidth: '520px',
+          backgroundColor: '#F8C2C9',
+          borderRadius: '26px',
+          maxWidth: '340px',
           width: '100%',
-          padding: '2rem 2.25rem',
-          boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25)',
+          padding: '2.5rem 2rem 2.25rem 2rem',
+          boxShadow: '0 24px 48px rgba(74, 37, 17, 0.25)',
           position: 'relative',
-          border: '1.5px solid #E5E7EB'
+          textAlign: 'center',
+          color: '#4A2511'
         }}
         onClick={(e) => e.stopPropagation()}
       >
-        {/* Close Button */}
+        {/* Top-Right Bright Yellow Circular Close Button */}
         <button
           onClick={onClose}
           style={{
             position: 'absolute',
-            top: '18px',
-            right: '18px',
+            top: '14px',
+            right: '14px',
             width: '32px',
             height: '32px',
             borderRadius: '50%',
-            backgroundColor: '#F3F4F6',
+            backgroundColor: '#FFC700',
             border: 'none',
-            fontSize: '1rem',
+            fontSize: '0.95rem',
             cursor: 'pointer',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            fontWeight: 'bold',
-            color: '#4B5563'
+            fontWeight: 900,
+            color: '#4A2511',
+            boxShadow: '0 2px 6px rgba(0,0,0,0.12)'
           }}
           aria-label="Close modal"
         >
           ✕
         </button>
 
-        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '1.25rem' }}>
+        {/* Animation GIF Showcase Area */}
+        <div
+          style={{
+            minHeight: '110px',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            gap: '10px',
+            paddingBottom: '1.25rem',
+            borderBottom: '2px solid #4A2511',
+            marginBottom: '1.25rem'
+          }}
+        >
+          <svg width="68" height="56" viewBox="0 0 84 68" fill="none">
+            <rect x="6" y="18" width="44" height="32" rx="8" fill="#FFC700" />
+            <line x1="16" y1="30" x2="38" y2="30" stroke="#4A2511" strokeWidth="3.5" strokeLinecap="round" />
+            <line x1="16" y1="38" x2="32" y2="38" stroke="#4A2511" strokeWidth="3.5" strokeLinecap="round" />
+            <circle cx="54" cy="24" r="16" stroke="#FF3B5C" strokeWidth="4" fill="rgba(255,255,255,0.5)" />
+            <line x1="65" y1="36" x2="77" y2="50" stroke="#FF3B5C" strokeWidth="5" strokeLinecap="round" />
+          </svg>
           <span
             style={{
-              padding: '6px 14px',
-              borderRadius: '9999px',
-              backgroundColor: '#FEF08A',
+              fontSize: '0.78rem',
               fontWeight: 800,
-              fontSize: '0.8rem',
-              color: '#854D0E',
-              border: '1px solid #FDE047'
+              color: '#4A2511',
+              letterSpacing: '0.02em'
             }}
           >
-            {isSprint ? '⚡ SPRINT METHODOLOGY' : '🧩 PODS METHODOLOGY'}
+            {approach} — Animation GIF
           </span>
-          <h3 style={{ fontSize: '1.4rem', fontWeight: 900, color: '#111827' }}>
-            {isSprint ? 'Sprint Approach' : 'Dedicated PODS'}
-          </h3>
         </div>
 
-        {/* Media / Animation placeholder */}
-        <div style={{ marginBottom: '1.25rem' }}>
-          <WireframePlaceholder
-            variant="pink"
-            aspectRatio="16/9"
-            label={isSprint ? "Process Animation GIF" : "PODS Structure Animation GIF"}
-          />
-        </div>
-
-        {/* Description Copy */}
-        <p style={{ fontSize: '0.92rem', color: '#4B5563', lineHeight: 1.6, marginBottom: '1.5rem' }}>
-          {isSprint
-            ? "Our 2-week Sprint framework accelerates time-to-market. We diagnose friction points, prototype rapid growth experiments, and iterate based on live telemetry to ensure your campaign beats category benchmarks within the first 14 days."
-            : "PODS (Performance, Operations, Design, Strategy) give your brand an autonomous, multidisciplinary team exclusively assigned to your roadmap. No fragmented communication or agency silos—just unified velocity and measurable outcomes."}
+        {/* Centered Description Copy matching Page 2 popup */}
+        <p
+          style={{
+            fontSize: '0.9rem',
+            color: '#4A2511',
+            lineHeight: 1.55,
+            fontWeight: 500
+          }}
+        >
+          Lorem ipsum dolor sit amet, consectetuer adipiscing elit, sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna aliquam erat volutpat. Ut wisi enim ad
         </p>
-
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <button
-            onClick={onClose}
-            style={{
-              padding: '10px 22px',
-              borderRadius: '9999px',
-              border: '1px solid #D1D5DB',
-              backgroundColor: '#F9FAFB',
-              fontWeight: 700,
-              fontSize: '0.9rem',
-              cursor: 'pointer'
-            }}
-          >
-            Close
-          </button>
-        </div>
       </div>
     </div>
   );

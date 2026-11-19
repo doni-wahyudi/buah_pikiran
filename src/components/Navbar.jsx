@@ -10,72 +10,99 @@ export default function Navbar({ currentPage, onNavigate }) {
   ];
 
   return (
-    <header style={{ position: 'sticky', top: '12px', zIndex: 100, marginBottom: '1rem' }}>
-      <div className="container-custom" style={{ padding: '0 1.5rem' }}>
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
-          height: '62px',
-          backgroundColor: '#FFCCD2',
-          borderRadius: '9999px',
-          padding: '0 2rem',
-          boxShadow: '0 4px 16px rgba(255, 120, 140, 0.15)',
-          border: '1px solid #FFAEB8'
-        }}
-      >
-        {/* Brand Logo */}
+    <header style={{ position: 'sticky', top: '12px', zIndex: 100, paddingTop: '0.5rem' }}>
+      <div className="container-custom">
         <div
-          onClick={() => onNavigate('home')}
-          style={{ display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', userSelect: 'none' }}
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            height: '58px',
+            backgroundColor: '#F8BFC7',
+            borderRadius: '9999px',
+            padding: '0 2.25rem',
+            boxShadow: '0 4px 14px rgba(74, 37, 17, 0.06)'
+          }}
         >
-          <MascotIcon type="logo" size={32} />
-          <div style={{ fontFamily: "var(--font-heading)", fontWeight: 800, fontSize: '1.25rem', letterSpacing: '-0.02em', lineHeight: 1.05, color: '#1F2937' }}>
-            BUAH <span style={{ color: '#E11D48' }}>PIKIRAN</span>
+          {/* Stacked 2-Line Brand Logo: BUAH 🍑 / PIKIRAN */}
+          <div
+            onClick={() => onNavigate('home')}
+            style={{
+              display: 'inline-flex',
+              flexDirection: 'column',
+              cursor: 'pointer',
+              userSelect: 'none',
+              lineHeight: 0.92
+            }}
+          >
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '2px',
+                fontFamily: 'var(--font-heading)',
+                fontWeight: 900,
+                fontSize: '0.98rem',
+                letterSpacing: '-0.03em',
+                color: '#4A2511'
+              }}
+            >
+              <span>BUAH</span>
+              <MascotIcon type="logo" size={16} />
+            </div>
+            <div
+              style={{
+                fontFamily: 'var(--font-heading)',
+                fontWeight: 900,
+                fontSize: '0.98rem',
+                letterSpacing: '-0.03em',
+                color: '#4A2511'
+              }}
+            >
+              PIKIRAN
+            </div>
           </div>
-        </div>
 
-        {/* Navigation Links */}
-        <nav style={{ display: 'flex', alignItems: 'center', gap: '2rem' }}>
-          {navItems.map((item) => {
-            const isActive = currentPage === item.id;
-            return (
-              <button
-                key={item.id}
-                onClick={() => onNavigate(item.id)}
-                style={{
-                  background: 'none',
-                  border: 'none',
-                  fontFamily: 'var(--font-heading)',
-                  fontSize: '1.02rem',
-                  fontWeight: isActive ? 800 : 600,
-                  color: isActive ? '#991B1B' : '#374151',
-                  cursor: 'pointer',
-                  position: 'relative',
-                  padding: '6px 2px',
-                  transition: 'all 0.15s ease'
-                }}
-              >
-                {item.label}
-                {isActive && (
-                  <span
-                    style={{
-                      position: 'absolute',
-                      bottom: '-2px',
-                      left: '0',
-                      right: '0',
-                      height: '2.5px',
-                      backgroundColor: '#991B1B',
-                      borderRadius: '9999px'
-                    }}
-                  />
-                )}
-              </button>
-            );
-          })}
-        </nav>
-      </div>
+          {/* Navigation Links */}
+          <nav style={{ display: 'flex', alignItems: 'center', gap: '2.25rem' }}>
+            {navItems.map((item) => {
+              const isActive = currentPage === item.id;
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => onNavigate(item.id)}
+                  style={{
+                    background: 'none',
+                    border: 'none',
+                    fontFamily: 'var(--font-heading)',
+                    fontSize: '1.05rem',
+                    fontWeight: isActive ? 900 : 700,
+                    color: '#4A2511',
+                    cursor: 'pointer',
+                    position: 'relative',
+                    padding: '4px 2px',
+                    transition: 'opacity 0.15s ease'
+                  }}
+                >
+                  {item.label}
+                  {isActive && (
+                    <span
+                      style={{
+                        position: 'absolute',
+                        bottom: '-2px',
+                        left: 0,
+                        right: 0,
+                        height: '2.5px',
+                        backgroundColor: '#4A2511',
+                        borderRadius: '9999px'
+                      }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
       </div>
     </header>
   );
